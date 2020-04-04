@@ -1,0 +1,40 @@
+﻿<Window x:Class="Water_Polo_Statbook.DeleteTeamWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Water_Polo_Statbook"
+        mc:Ignorable="d"
+        Title="DeleteTeamWindow" Height="450" Width="450"
+        WindowStartupLocation="CenterScreen">
+    <Grid>
+        <Image Source="res/b_delete_team.jpg" Margin="-157,0,-368,0"/>
+        <Grid Height="200" Width="300" Style="{StaticResource GridStyle}">
+
+            <Grid Height="150" Width="200">
+                <Grid.RowDefinitions>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
+
+                <TextBlock Text="Are you sure you want to delete this team?" Foreground="White" FontSize="20" Style="{StaticResource TextBlockStyle}" TextWrapping="Wrap" VerticalAlignment="Center"/>
+                <Grid Grid.Row="1">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.Resources>
+                        <Style TargetType="Button" BasedOn="{StaticResource ButtonStyle}"/>
+                    </Grid.Resources>
+                    <Button x:Name="YesBTN" Content="YES" Grid.Column="1" Click="YesBTN_Click"/>
+                    <Button x:Name="NoBTN" Content="NO" Grid.Column="0" Click="NoBTN_Click"/>
+                </Grid>
+
+            </Grid>
+            
+
+           
+        </Grid>
+        
+    </Grid>
+</Window>
