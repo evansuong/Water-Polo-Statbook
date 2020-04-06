@@ -13,6 +13,7 @@
     <None Remove="res\b_add_team.jpg" />
     <None Remove="res\b_delete_team.jpg" />
     <None Remove="res\b_edit_team.jpg" />
+    <None Remove="res\b_game_profile.jpg" />
     <None Remove="res\b_main_window.jpg" />
     <None Remove="res\b_player_profile.jpg" />
     <None Remove="res\b_team_window.jpg" />
@@ -29,6 +30,7 @@
     <Resource Include="res\b_add_team.jpg" />
     <Resource Include="res\b_delete_team.jpg" />
     <Resource Include="res\b_edit_team.jpg" />
+    <Resource Include="res\b_game_profile.jpg" />
     <Resource Include="res\b_main_window.jpg" />
     <Resource Include="res\b_player_profile.jpg" />
     <Resource Include="res\b_team_window.jpg" />

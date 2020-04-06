@@ -31,15 +31,19 @@ namespace Water_Polo_Statbook
         // mysql connection reference
         private MySqlConnection con;
 
+        // mygame object
+        private MyGame myGame;
+
         // constant strings
         private const string SCORE_FMT = "{0}-{1}";
         private const string SELECT_PLAYER_MSG = "Please select a player";
-        private const string SELECT_GAME_MSG = "Please select a player";
+        private const string SELECT_GAME_MSG = "Please select a game";
         private const string SELECT_TEAM_STATS_QRY = "select * from team_stats where team_id={0}";
         private const string SELECT_PLAYERS_QRY = "select * from player where team_id={0}";
         private const string SELECT_PLAYER_ATTR_QRY = "select * from player where id={0}";
         private const string SELECT_PLAYER_STATS_QRY = "select * from player_stats where player_id={0}";
-        private const string SELECT_PLAYER_ATT_STATS_QRY = "select * from player inner join player_stats on player.id = player_stats.player_id where team_id={0}"; 
+        private const string SELECT_PLAYER_ATT_STATS_QRY = "select * from player inner join player_stats on player.id = player_stats.player_id where team_id={0}";
+        private const string SELECT_GAME_QRY = "select * from game where id={0}";
         private const string SELECT_GAMES_QRY = "select game.opp_team, game.game_type, game.game_location, game.game_date, game.game_result, game.id, game_stats.total_gol, game_stats_opponent.total_gol as opp_total_gol from game inner join game_stats on game.id = game_stats.game_id inner join game_stats_opponent on game.id = game_stats_opponent.game_id where game.team_id={0}";
 
 
@@ -50,6 +54,7 @@ namespace Water_Polo_Statbook
             this.myPlayer = myPlayer;
             this.con = con;
 
+            myGame = new MyGame();
 
             InitializeComponent();
             Set_Labels();
@@ -107,8 +112,15 @@ namespace Water_Polo_Statbook
         /// <param name="e"></param>
         private void ViewGameBTN_Click(object sender, RoutedEventArgs e)
         {
-            GameProfileWindow tpw = new GameProfileWindow(this, 1, con);
-            tpw.Show();
+            if (myGame.HasAttributes())
+            {
+                GameProfileWindow tpw = new GameProfileWindow(this, myTeam, myGame, con);
+                tpw.Show();
+            }
+            else
+            {
+                MessageBox.Show(SELECT_GAME_MSG);
+            }
         }
 
         /// <summary>
@@ -138,7 +150,7 @@ namespace Water_Polo_Statbook
         /// <param name="e"></param>
         private void NewGameBTN_Click(object sender, RoutedEventArgs e)
         {
-            AddGameWindow agw = new AddGameWindow(this, myTeam, con);
+            AddGameWindow agw = new AddGameWindow(this, myTeam, myGame, con);
             agw.Show();
             this.Hide();
         }
@@ -151,6 +163,16 @@ namespace Water_Polo_Statbook
         private void SearchGameTB_KeyUp(object sender, KeyEventArgs e)
         {
 
+        }
+
+        /// <summary>
+        /// fills mygame attribtues with select game info
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void GamesDG_MouseUp(object sender, MouseButtonEventArgs e)
+        {
+            Set_Game_Attributes();
         }
 
         /// <summary>
@@ -184,7 +206,7 @@ namespace Water_Polo_Statbook
         {
             Load_Player_Table_Data();
             Load_Game_Table_Data();
-            Update_Team();
+            Set_Team_Stats();
             Set_Labels();
         }
 
@@ -193,9 +215,9 @@ namespace Water_Polo_Statbook
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void PlayersDT_MouseUp(object sender, MouseButtonEventArgs e)
+        private void PlayersDG_MouseUp(object sender, MouseButtonEventArgs e)
         {
-            Set_Player_Info();
+            Set_Player_Attributes_Stats();
         }
 
 
@@ -203,12 +225,12 @@ namespace Water_Polo_Statbook
         /// <summary>
         /// fills myplayer attributes and stats of selected player
         /// </summary>
-        private void Set_Player_Info()
+        private void Set_Player_Attributes_Stats()
         {
             // set team name and id if a team is selected
-            if (PlayersDT.SelectedItems.Count == 1)
+            if (PlayersDG.SelectedItems.Count == 1)
             {
-                var items = PlayersDT.SelectedItems;
+                var items = PlayersDG.SelectedItems;
                 foreach (DataRowView item in items)
                 {
                     int id = Int32.Parse(item["id"].ToString());
@@ -263,7 +285,7 @@ namespace Water_Polo_Statbook
                 con.Close();
 
                 // populate datagrid with players datatable 
-                PlayersDT.ItemsSource = dt.DefaultView;
+                PlayersDG.ItemsSource = dt.DefaultView;
             }
             catch (Exception e)
             {
@@ -300,17 +322,19 @@ namespace Water_Polo_Statbook
                 }
                 else
                 {
-                    // format game score
-                    int goals = Int32.Parse(dt.Rows[0]["total_gol"].ToString());
-                    int oppGoals = Int32.Parse(dt.Rows[0]["opp_total_gol"].ToString());
-
-
-                    score = string.Format(SCORE_FMT, goals, oppGoals);
-                    dt.Rows[0]["game_score"] = score;
+                    // add game score to each game in table
+                    for (int i = 0; i < rows; i++)
+                    {
+                        // format game score
+                        string goals = dt.Rows[i]["total_gol"].ToString();
+                        string oppGoals = dt.Rows[i]["opp_total_gol"].ToString();
+                        score = string.Format(SCORE_FMT, goals, oppGoals);
+                        dt.Rows[i]["game_score"] = score;
+                    }
                 }
 
                 // populate datagrid with players datatable 
-                GamesDT.ItemsSource = dt.DefaultView;
+                GamesDG.ItemsSource = dt.DefaultView;
             }
             catch (Exception e)
             {
@@ -336,7 +360,7 @@ namespace Water_Polo_Statbook
         /// <summary>
         /// updates team stats 
         /// </summary>
-        private void Update_Team()
+        private void Set_Team_Stats()
         {
             // update team record
             Check_Record();
@@ -351,6 +375,41 @@ namespace Water_Polo_Statbook
             sda.Fill(ds);
             con.Close();
             myTeam.Set_Stats(ds);
+        }
+
+        private void Set_Game_Attributes()
+        {
+            // set team name and id if a team is selected
+            if (GamesDG.SelectedItems.Count == 1)
+            {
+                var items = GamesDG.SelectedItems;
+                foreach (DataRowView item in items)
+                {
+                    int id = Int32.Parse(item["id"].ToString());
+
+                    try
+                    {
+                        // get game attributes from qry by id
+                        string qry = string.Format(SELECT_GAME_QRY, id);
+                        con.Open();
+
+                        // populate attribute dataset then set player attributes
+                        MySqlDataAdapter sda = new MySqlDataAdapter(qry, con);
+                        DataSet ds = new DataSet();
+                        sda.Fill(ds);
+                        con.Close();
+
+                        myGame.Set_Attributes(ds);
+                    }
+                    catch (Exception e)
+                    {
+                        MessageBox.Show(e.ToString());
+                    }
+                }
+            }
+
+            if (con.State == ConnectionState.Open)
+                con.Close();
         }
 
         /// <summary>

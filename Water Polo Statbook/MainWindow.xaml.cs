@@ -675,6 +675,66 @@ namespace Water_Polo_Statbook
             this.id = id;
         }
     }
+
+
+    public class MyGame
+    {
+        private string name;
+        private string type;
+        private string loc;
+        private string date;
+        private string result;
+        private int teamId;
+        private int id;
+        private bool hasAttributes = false;
+
+        public void Set_Attributes(DataSet ds)
+        {
+            this.name = ds.Tables[0].Rows[0]["opp_team"].ToString();
+            this.type = ds.Tables[0].Rows[0]["game_type"].ToString();
+            this.loc = ds.Tables[0].Rows[0]["game_location"].ToString();
+            this.date = ds.Tables[0].Rows[0]["game_date"].ToString();
+            this.result = ds.Tables[0].Rows[0]["game_result"].ToString();
+            this.id = Convert.ToInt32(ds.Tables[0].Rows[0]["id"].ToString());
+            this.teamId = Convert.ToInt32(ds.Tables[0].Rows[0]["team_id"].ToString());
+            this.hasAttributes = true;
+        }
+
+        public string GetName()
+        {
+            return name;
+        }
+        public string GetGameType()
+        {
+            return this.type;
+        }
+        public string GetLoc()
+        {
+            return loc;
+        }
+        public string GetDate()
+        {
+            return date;
+        }
+        public string GetResult()
+        {
+            return result;
+        }
+        public int GetTeamId()
+        {
+            return teamId;
+        }
+        public int GetId()
+        {
+            return id;
+        }
+        public bool HasAttributes()
+        {
+            return hasAttributes;
+        }
+    }
+
+
     public class MyModelObject
     {
         public string Record { get; set; }
@@ -698,6 +758,11 @@ namespace Water_Polo_Statbook
         public string Year { get; set; }
         public string Height { get; set; }
         public string Weight { get; set; }
+        public string GameName { get; set; }
+        public string GameType { get; set; }
+        public string GameLoc { get; set; }
+        public string GameDate { get; set; }
+        public List<string> PlayerNames { get; set; }
     }
 
 }
