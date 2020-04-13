@@ -35,7 +35,6 @@ namespace Water_Polo_Statbook
         // mygame object
         private MyGame myGame;
 
-        // constant strings
         // player queries 
         private const string SELECT_PLAYERS_QRY = "select * from player where team_id={0}";
         private const string SELECT_PLAYER_ATTR_QRY = "select * from player where id={0}";
@@ -48,7 +47,6 @@ namespace Water_Polo_Statbook
         private const string SELECT_MAX_STL_QRY = "select player.player_name, player_stats.total_stl from player inner join player_stats on player.id = player_stats.player_id where team_id={0} order by total_stl desc limit 1";
 
         // game queries
-        private const string SELECT_GAME_MSG = "Please select a game";
         private const string SELECT_GAME_QRY = "select game.opp_team, game.game_type, game.game_location, game.game_result, date_format(game_date, '%M-%D-%Y') as game_date, game.team_id, game.id, game_stats_opponent.total_gol as opp_total_gol, game_stats.total_gol from game inner join game_stats on game.id = game_stats.game_id inner join game_stats_opponent on game.id = game_stats_opponent.game_id where game.id={0}";
         private const string SELECT_GAMES_QRY = "select game.opp_team, game.game_type, game.game_location, date_format(game.game_date, '%M-%D-%Y') as game_date, game.game_result, game.id, game_stats.total_gol, game_stats_opponent.total_gol as opp_total_gol from game inner join game_stats on game.id = game_stats.game_id inner join game_stats_opponent on game.id = game_stats_opponent.game_id where game.team_id={0}";
         private const string DELETE_GAME_QRY = "delete from game where id={0}";
@@ -56,14 +54,21 @@ namespace Water_Polo_Statbook
 
         // team queries
         private const string SELECT_TEAM_STATS_QRY = "select * from team_stats where team_id={0}";
+        private const string DELETE_TEAM_QRY = "delete from team where id = {0}";
 
         // misc queries
-        private const string DISABLE_FOREIGN_KEY_QRY = "set FOREIGN_KEY_CHECKS = 0";
+        private const string FOREIGN_KEY_DISABLE_QRY = "set FOREIGN_KEY_CHECKS = 0";
+
+        // string formatting
         private const string SCORE_FMT = "{0}-{1}";
         private const string PLAYER_STAT_FMT = "{0}: {1}";
 
         // error messages
-        private const string SELECT_PLAYER_MSG = "Please select a player";
+        private const string SELECT_PLAYER_ERR = "Please select a player";
+        private const string SELECT_GAME_ERR = "Please select a game";
+
+        // misc messages
+        private const string DLT_MSG = "Are you sure you want to delete?";
 
 
         public TeamMainWindow(Window callingWindow, MyTeam myTeam, MyPlayer myPlayer, MySqlQueryBuilder build)
@@ -98,7 +103,16 @@ namespace Water_Polo_Statbook
         /// <param name="e"></param>
         private void DeleteTeamBTN_Click(object sender, RoutedEventArgs e)
         {
-            Delete_Team();
+            // prompt user if they want to delete the team
+            MessageBoxResult result = MessageBox.Show("", DLT_MSG, MessageBoxButton.YesNo);
+            if (result == MessageBoxResult.Yes)
+            {
+                Delete_Team();
+            }
+            else
+            {
+                return;
+            }
         }
 
         /// <summary>
@@ -139,7 +153,7 @@ namespace Water_Polo_Statbook
             }
             else
             {
-                MessageBox.Show(SELECT_GAME_MSG);
+                MessageBox.Show(SELECT_GAME_ERR);
             }
         }
 
@@ -157,7 +171,7 @@ namespace Water_Polo_Statbook
             }
             else
             {
-                MessageBox.Show(SELECT_GAME_MSG);
+                MessageBox.Show(SELECT_GAME_ERR);
             }
         }
 
@@ -168,7 +182,23 @@ namespace Water_Polo_Statbook
         /// <param name="e"></param>
         private void DeleteGameBTN_Click(object sender, RoutedEventArgs e)
         {
-            Delete_Game();
+            if (myGame.HasAttributes())
+            {
+                // prompt user if they want to leave the window 
+                MessageBoxResult result = MessageBox.Show("", DLT_MSG, MessageBoxButton.YesNo);
+                if (result == MessageBoxResult.Yes)
+                {
+                    Delete_Game();
+                }
+                else
+                {
+                    return;
+                }
+            }
+            else
+            {
+                MessageBox.Show(SELECT_GAME_ERR);
+            }
         }
 
         /// <summary>
@@ -211,9 +241,17 @@ namespace Water_Polo_Statbook
         /// <param name="e"></param>
         private void ViewPlayerBTN_Click(object sender, RoutedEventArgs e)
         {
-            PlayerProfileWindow ppw = new PlayerProfileWindow(this, myTeam, myPlayer, build);
-            ppw.Show();
-            this.Hide();
+            if (myPlayer.HasAttributes())
+            {
+                PlayerProfileWindow ppw = new PlayerProfileWindow(this, myTeam, myPlayer, build);
+                ppw.Show();
+                this.Hide();
+            }
+            else
+            {
+                MessageBox.Show(SELECT_PLAYER_ERR);
+                return;
+            }
         }
 
         /// <summary>
@@ -351,8 +389,6 @@ namespace Water_Polo_Statbook
 
         /* --------------- GAME HELPER METHODS -------------- */
         
-
-
         /// <summary>
         /// updates game data table
         /// </summary>
@@ -382,15 +418,9 @@ namespace Water_Polo_Statbook
 
 
         private void Delete_Game()
-        {
-            // check if a game has been selected
-            if (!myGame.HasAttributes())
-            {
-                MessageBox.Show(SELECT_GAME_MSG);
-            }
-
+        {   
             // disable foregnkey contraints
-            string setQry = DISABLE_FOREIGN_KEY_QRY;
+            string setQry = FOREIGN_KEY_DISABLE_QRY;
             build.Execute_Query(setQry);
 
             // delete game from database
@@ -484,16 +514,23 @@ namespace Water_Polo_Statbook
         }
 
 
-       
+
 
         /// <summary>
         /// takes user to delete team window to ensure user wants to delete the team
         /// </summary>
         private void Delete_Team()
         {
-            DeleteTeamWindow dtw = new DeleteTeamWindow(this, callingWindow, myTeam, build);
-            dtw.Show();
+            // disable foreign key checks
+            build.Execute_Query(FOREIGN_KEY_DISABLE_QRY);
+
+            // delete team from database
+            string qry = string.Format(DELETE_TEAM_QRY, myTeam.GetId());
+            build.Execute_Query(qry);
+            callingWindow.Show();
+            this.Close();
         }
+
 
 
 

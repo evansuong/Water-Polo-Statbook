@@ -41,17 +41,19 @@ namespace Water_Polo_Statbook
         // reference to player object
         private MyPlayer myPlayer;
 
-        // message constants
-        private const string SELECT_PLAYER_MSG = "Please select a player";
-        private const string STRING_FORMAT_MSG = "Please ensure that {0} is a number";
+        // query commands
         private const string DISABLE_FOREIGN_KEY_QRY = "set FOREIGN_KEY_CHECKS = 0";
         private const string UPDATE_PLAYER_QRY = "update player set player_num={0}, player_name='{1}', player_pos='{2}', player_year={3}, player_height={4}, player_weight={5} where id={6}";
         private const string INSERT_PLAYER_QRY = "insert into player values ({0}, '{1}', '{2}', {3}, {4}, {5}, {6}, NULL)";
         private const string DELETE_PLAYER_QRY = "delete from player where id={0}";
-        private const string FILL_TB_MSG = "Please fill all text boxes";
         private const string SEARCH_PLAYER_BY_NAME_QRY = "select * from player where player_name like '{0}%' and team_id={1}";
         private const string SEARCH_PLAYER_BY_ID_QRY = "select * from player where id={0}";
 
+        // message constans
+        private const string SELECT_PLAYER_MSG = "Please select a player";
+        private const string FILL_TB_MSG = "Please fill all text boxes";
+        private const string DLT_MSG = "Are you sure you want to delete?";
+        private const string STRING_FORMAT_MSG = "Please ensure that {0} is a number";
 
         public EditTeamWindow(Window callingWindow, MyTeam myTeam, MyPlayer myPlayer, MySqlQueryBuilder build)
         {
@@ -75,17 +77,36 @@ namespace Water_Polo_Statbook
             }
             Add_Player();
             Clear_All();
+            Load_Table_Data();
         }
 
         private void RemoveBTN_Click(object sender, RoutedEventArgs e)
         {
-            Remove_Player();
-            Clear_All();
+            if (myPlayer.HasAttributes())
+            {
+                // prompt user if they want to delete the player
+                MessageBoxResult result = MessageBox.Show("", DLT_MSG, MessageBoxButton.YesNo);
+                if (result == MessageBoxResult.Yes)
+                {
+                    Remove_Player();
+                    Clear_All();
+                    Load_Table_Data();
+                }
+                else
+                {
+                    return;
+                }
+            }
+            else
+            {
+                MessageBox.Show(SELECT_PLAYER_MSG);
+            }
+           
         }
 
         private void UpdateBTN_Click(object sender, RoutedEventArgs e)
         {
-            if (PlayersDT.SelectedCells.Count < 1)
+            if (!myPlayer.HasAttributes())
             {
                 MessageBox.Show(SELECT_PLAYER_MSG);
             }
@@ -97,6 +118,7 @@ namespace Water_Polo_Statbook
             }
             Update_Player();
             Clear_All();
+            Load_Table_Data();
         }
 
         private void BackBTN_Click(object sender, RoutedEventArgs e)
@@ -184,9 +206,6 @@ namespace Water_Polo_Statbook
             // insert player into player data table
             string qry = string.Format(INSERT_PLAYER_QRY, playerNum, playerName, playerPos, playerYear, playerHeight, playerWeight, myTeam.GetId());
             build.Execute_Query(qry);
-
-            // refresh tabe 
-            Load_Table_Data();
         }
 
         /// <summary>
@@ -201,9 +220,6 @@ namespace Water_Polo_Statbook
             // remove player with id from player data table
             string qry = string.Format(DELETE_PLAYER_QRY, playerId);
             build.Execute_Query(qry);
-
-            // refresh table
-            Load_Table_Data();
         }
 
         /// <summary>
@@ -260,9 +276,6 @@ namespace Water_Polo_Statbook
             // update player info based on id
             string qry = string.Format(UPDATE_PLAYER_QRY, playerNum, playerName, playerPos, playerYear, playerHeight, playerWeight, myPlayer.GetId());
             build.Execute_Query(qry);
-
-            // refresh table
-            Load_Table_Data();
         }
 
 

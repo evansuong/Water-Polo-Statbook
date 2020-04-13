@@ -38,8 +38,6 @@ C:\Users\evans\Desktop\Projects\C#\SQL Tutorials\Water Polo Statbook\Water Polo 
 C:\Users\evans\Desktop\Projects\C#\SQL Tutorials\Water Polo Statbook\Water Polo Statbook\obj\Debug\netcoreapp3.1\TeamMainWindow.g.cs
 C:\Users\evans\Desktop\Projects\C#\SQL Tutorials\Water Polo Statbook\Water Polo Statbook\obj\Debug\netcoreapp3.1\TeamMainWindow.baml
 C:\Users\evans\Desktop\Projects\C#\SQL Tutorials\Water Polo Statbook\Water Polo Statbook\obj\Debug\netcoreapp3.1\App.baml
-C:\Users\evans\Desktop\Projects\C#\SQL Tutorials\Water Polo Statbook\Water Polo Statbook\obj\Debug\netcoreapp3.1\DeleteTeamWindow.g.cs
-C:\Users\evans\Desktop\Projects\C#\SQL Tutorials\Water Polo Statbook\Water Polo Statbook\obj\Debug\netcoreapp3.1\DeleteTeamWindow.baml
 C:\Users\evans\Desktop\Projects\C#\SQL Tutorials\Water Polo Statbook\Water Polo Statbook\obj\Debug\netcoreapp3.1\PlayerProfileWindow.g.cs
 C:\Users\evans\Desktop\Projects\C#\SQL Tutorials\Water Polo Statbook\Water Polo Statbook\obj\Debug\netcoreapp3.1\PlayerProfileWindow.baml
 C:\Users\evans\Desktop\Projects\C#\SQL Tutorials\Water Polo Statbook\Water Polo Statbook\obj\Debug\netcoreapp3.1\TeamProfileWindow.g.cs

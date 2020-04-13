@@ -38,7 +38,7 @@ namespace Water_Polo_Statbook
         private const string INSERT_TEAM_QRY = "insert into team values ('{0}','{1}', NULL)";
         private const string FILL_TEXT_MSG = "Ensure all textboxes are filled";
 
-        public AddTeamWindow(MainWindow mainWindow, MyTeam myTeam, MySqlQueryBuilder myQueryBuilder)
+        public AddTeamWindow(MainWindow mainWindow, MyTeam myTeam, MySqlQueryBuilder build)
         {
             this.mainWindow = mainWindow;
             this.myTeam = myTeam;

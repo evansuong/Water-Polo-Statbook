@@ -13,9 +13,6 @@
     <Compile Update="AddTeamWindow.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Update="DeleteTeamWindow.xaml.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Update="EditGameWindow.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -40,9 +37,6 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Update="AddTeamWindow.xaml">
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Update="DeleteTeamWindow.xaml">
       <SubType>Designer</SubType>
     </Page>
     <Page Update="EditGameWindow.xaml">

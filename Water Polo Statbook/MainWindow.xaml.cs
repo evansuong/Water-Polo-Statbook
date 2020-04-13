@@ -32,12 +32,17 @@ namespace Water_Polo_Statbook
 
         // Message Constants
         private const string SELECT_TEAM_MSG = "Please Select a Team";
+
+        // qry constants
         private const string FOREIGN_KEY_DISABLE_QRY = "set FOREIGN_KEY_CHECKS = 0";
         private const string SELECT_TEAM_QRY = "select * from team where id = {0}";
         private const string SELECT_TEAM_STATS_QRY = "select * from team_stats where team_id={0}";
         private const string DELETE_TEAM_QRY = "delete from team where id = {0}";
         private const string SEARCH_TEAM_QRY = "select * from team where team_name like '{0}%'";
         private const string GET_TEAMS_QRY = "select * from team";
+
+        // misc messages
+        private const string DLT_MSG = "Are you sure you want to delete?";
 
         // Team Object
         private MyTeam myTeam;
@@ -66,7 +71,18 @@ namespace Water_Polo_Statbook
         /// <param name="e"></param>
         private void EditTeamBTN_Click(object sender, RoutedEventArgs e)
         {
-            Edit_Team();
+            // check if a team is selected
+            if (myTeam.HasInfo())
+            {
+                EditTeamWindow atw = new EditTeamWindow(this, myTeam, myPlayer, build);
+                atw.Show();
+                this.Hide();
+            }
+
+            else
+            {
+                MessageBox.Show(SELECT_TEAM_MSG);
+            }
         }
 
         /// <summary>
@@ -86,7 +102,16 @@ namespace Water_Polo_Statbook
         /// <param name="e"></param>
         private void DeleteTeamBTN_Click(object sender, RoutedEventArgs e)
         {
-            Delete_Team();
+            // prompt user if they want to delete the team
+            MessageBoxResult result = MessageBox.Show("", DLT_MSG, MessageBoxButton.YesNo);
+            if (result == MessageBoxResult.Yes)
+            {
+                Delete_Team();
+            }
+            else
+            {
+                return;
+            }
         }
 
        /// <summary>
@@ -119,6 +144,13 @@ namespace Water_Polo_Statbook
             Set_Team_Attributes();
         }
 
+
+
+        /// <summary>
+        /// loads table data every time this window is laoded
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void Window_ContentRendered(object sender, EventArgs e)
         {
             Load_Table_Data();
@@ -127,36 +159,7 @@ namespace Water_Polo_Statbook
 
         /* ---------- HELPER METHODS ----------------*/
 
-        /// <summary>
-        /// load all teams into team datagrid
-        /// </summary>
-        private void Load_Table_Data()
-        {
-            // select all teams
-            string qry = GET_TEAMS_QRY;
-            TeamsDT.ItemsSource = build.Execute_DataTable_Qry(qry).DefaultView;
-        }
-
-
-        /// <summary>
-        /// takes user to edit window of selected team
-        /// </summary>
-        private void Edit_Team()
-        {
-            // check if a team is selected
-            if (myTeam.HasInfo())
-            {
-                EditTeamWindow atw = new EditTeamWindow(this, myTeam, myPlayer, build);
-                atw.Show();
-                this.Hide();
-            }
-
-            else
-            {
-                MessageBox.Show(SELECT_TEAM_MSG);
-            }
-        }
-
+        /* ---------- TEAM HELPER METHODS ------------- */
 
         /// <summary>
         /// takes user to main window of selected team
@@ -185,9 +188,13 @@ namespace Water_Polo_Statbook
         /// </summary>
         private void Delete_Team()
         {
-            DeleteTeamWindow dtw = new DeleteTeamWindow(this, this, myTeam, build);
-            dtw.Show();
-            this.Hide();
+            // disable foreign key checks
+            build.Execute_Query(FOREIGN_KEY_DISABLE_QRY);
+
+            // delete team from database
+            string qry = string.Format(DELETE_TEAM_QRY, myTeam.GetId());
+            build.Execute_Query(qry);
+            Load_Table_Data();
         }
 
 
@@ -234,7 +241,19 @@ namespace Water_Polo_Statbook
             }
         }
 
-        
+
+
+        /* --------------- MISC HELPER METHODS --------------- */
+        /// <summary>
+        /// load all teams into team datagrid
+        /// </summary>
+        private void Load_Table_Data()
+        {
+            // select all teams
+            string qry = GET_TEAMS_QRY;
+            TeamsDT.ItemsSource = build.Execute_DataTable_Qry(qry).DefaultView;
+        }
+
 
 
         /* --------- GETTERS AND SETTERS -------------- */
