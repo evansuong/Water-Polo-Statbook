@@ -6,7 +6,6 @@
         xmlns:local="clr-namespace:Water_Polo_Statbook"
         mc:Ignorable="d"
         Title="GameProfileWindow" Height="500" Width="805"
-        Activated="Window_Activated"
         WindowStartupLocation="CenterScreen"
         WindowStyle="None">
     <Grid>

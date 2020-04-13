@@ -69,11 +69,6 @@ namespace Water_Polo_Statbook
             Update_Tables();
         }
 
-        private void Window_Activated(object sender, EventArgs e)
-        {
-           
-        }
-
         private void AddStatBTN_Click(object sender, RoutedEventArgs e)
         {
             Load_Players();
@@ -131,6 +126,10 @@ namespace Water_Polo_Statbook
 
         /* ----------------- HELPER METHODS ------------------- */
 
+
+        /// <summary>
+        /// adds user specified stat to game and to all team and player stat totals
+        /// </summary>
         private void Add_Stat()
         {
             // set deafult qtr values
@@ -183,6 +182,10 @@ namespace Water_Polo_Statbook
             this.UpdateLayout();
         }
 
+
+        /// <summary>
+        /// deletes selected stat
+        /// </summary>
         private void Delete_Stat()
         {
             // get stat id from game history dg

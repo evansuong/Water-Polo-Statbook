@@ -36,6 +36,7 @@ namespace Water_Polo_Statbook
         private const string SELECT_GAME_QRY = "select opp_team, game_type, game_location, date_format(game_date, '%M-%D-%Y') as game_date, game_result, team_id, id from game order by id desc limit 1";
         private const string UPDATE_GAME_QRY = "update game set opp_team='{0}', game_type='{1}', game_location='{2}', game_date='{3}' where id={4}";
 
+          
         public EditGameWindow(Window callingWindow, MyGame myGame, MySqlQueryBuilder build)
         {
             this.callingWindow = callingWindow;
@@ -56,6 +57,11 @@ namespace Water_Polo_Statbook
             GameLocCB.Text = myGame.GetLoc();
         }
 
+        /// <summary>
+        /// sends user back to team main window after prompt
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void BackBTN_Click(object sender, RoutedEventArgs e)
         {
             // prompt user if they want to leave the window 
