@@ -13,6 +13,7 @@ using System.Windows.Interop;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using static Water_Polo_Statbook.MainWindow;
 
 namespace Water_Polo_Statbook
 {
@@ -26,7 +27,7 @@ namespace Water_Polo_Statbook
         private MainWindow mainWindow;
 
         // MySql connection reference 
-        private MySqlConnection con;
+        private MySqlQueryBuilder build;
 
         // myteam reference 
         private MyTeam myTeam;
@@ -37,11 +38,11 @@ namespace Water_Polo_Statbook
         private const string INSERT_TEAM_QRY = "insert into team values ('{0}','{1}', NULL)";
         private const string FILL_TEXT_MSG = "Ensure all textboxes are filled";
 
-        public AddTeamWindow(MainWindow mainWindow, MyTeam myTeam, MySqlConnection con)
+        public AddTeamWindow(MainWindow mainWindow, MyTeam myTeam, MySqlQueryBuilder myQueryBuilder)
         {
             this.mainWindow = mainWindow;
             this.myTeam = myTeam;
-            this.con = con;
+            this.build = build;
             InitializeComponent();
         }
 
@@ -69,6 +70,7 @@ namespace Water_Polo_Statbook
         /* ------------- HELPER METHODS ------------ */
         /// <summary>
         /// fills myteam with attributes and stats and inserts into datatable
+        /// navigates user to team editor of new team
         /// </summary>
         private void Create_Team()
         {
@@ -90,25 +92,14 @@ namespace Water_Polo_Statbook
                 // add team to database
                 AddTeam(teamName, teamYear);
 
-                try
-                {
-                    con.Open();
-                    // get team info from data table
-                    string qry = string.Format(SELECT_RECENT_TEAM_QRY);
-                    MySqlDataAdapter sda = new MySqlDataAdapter(qry, con);
-                    DataSet ds = new DataSet();
-                    int i = sda.Fill(ds);
-                    con.Close();
+                // get team info from data table
+                string qry = string.Format(SELECT_RECENT_TEAM_QRY);
 
-                    // set team attributes from dataset
-                    myTeam.SetAttributes(ds);
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show(ex.ToString());
-                }
+                // set team attributes from dataset
+                myTeam.SetAttributes(build.Execute_DataSet_Query(qry));
 
-                EditTeamWindow etw = new EditTeamWindow(mainWindow, myTeam, mainWindow.GetMyPlayer(), con);
+                // navigate user to team editor of new team
+                EditTeamWindow etw = new EditTeamWindow(mainWindow, myTeam, mainWindow.GetMyPlayer(), build);
                 etw.Show();
                 this.Close();
             }
@@ -116,9 +107,6 @@ namespace Water_Polo_Statbook
             {
                 MessageBox.Show(YEAR_FORMAT_MSG);
             }
-
-            if (con.State == ConnectionState.Open)
-                con.Close();
         }
 
         /// <summary>
@@ -126,20 +114,9 @@ namespace Water_Polo_Statbook
         /// </summary>
         private void AddTeam(string teamName, string teamYear)
         {
-            con.Open();
+            // add team to database
             string qry = string.Format(INSERT_TEAM_QRY, teamName, teamYear);
-
-            try
-            {
-                MySqlCommand msc = new MySqlCommand(qry, con);
-                msc.ExecuteNonQuery();
-            }
-            catch (Exception e)
-            {
-                MessageBox.Show(e.ToString());
-            }
-            con.Close();
-
+            build.Execute_Query(qry);
         }
 
         /// <summary>

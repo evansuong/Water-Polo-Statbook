@@ -23,17 +23,17 @@
             </Grid.ColumnDefinitions>
 
             <Grid.RowDefinitions>
-                <RowDefinition Height="81*"/>
-                <RowDefinition Height="26*"/>
-                <RowDefinition Height="302*"/>
-                <RowDefinition Height="25*"/>
+                <RowDefinition Height="2*"/>
+                <RowDefinition Height="1*"/>
+                <RowDefinition Height="10*"/>
+                <RowDefinition Height="1*"/>
             </Grid.RowDefinitions>
 
             <!-- HEADER PANEL -->
             <Grid Grid.Column="0" Grid.ColumnSpan="3" Style="{StaticResource GridStyle}">
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="257*"/>
-                    <ColumnDefinition Width="43*"/>
+                    <ColumnDefinition Width="6*"/>
+                    <ColumnDefinition Width="1*"/>
                 </Grid.ColumnDefinitions>
 
                 <Grid.Resources>
@@ -87,15 +87,13 @@
                 </Border>
 
                 <!-- PLAYER INFO PANEL -->
-                <Grid Width="400" Height="370">
+                <Grid Width="400" Height="400">
 
                     <Grid.RowDefinitions>
-                        <RowDefinition Height="34*"/>
-                        <RowDefinition Height="113*"/>
-                        <RowDefinition Height="33*"/>
-                        <RowDefinition Height="33*"/>
-                        <RowDefinition Height="34*"/>
-                        <RowDefinition Height="122*"/>
+                        <RowDefinition Height="1*"/>
+                        <RowDefinition Height="4*"/>
+                        <RowDefinition Height="1*"/>
+                        <RowDefinition Height="7*"/>
                     </Grid.RowDefinitions>
 
                     <Grid.Resources>
@@ -106,10 +104,10 @@
                     </Grid.Resources>
 
                     <!-- PLAYER PICTURE AND INFO -->
-                    <Grid Margin="0,34,0,0" Grid.RowSpan="2">
+                    <Grid Grid.Row="1">
                         <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="12*"/>
-                            <ColumnDefinition Width="13*"/>
+                            <ColumnDefinition Width="1*"/>
+                            <ColumnDefinition Width="1*"/>
                         </Grid.ColumnDefinitions>
 
                         <!-- PLAYER PIC -->
@@ -118,8 +116,8 @@
                         <!-- PLAYER INFO -->
                         <Grid Grid.Column="1">
                             <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="102*"/>
-                                <ColumnDefinition Width="131*"/>
+                                <ColumnDefinition Width="5*"/>
+                                <ColumnDefinition Width="6*"/>
                             </Grid.ColumnDefinitions>
 
                             <Grid.Resources>
@@ -189,79 +187,93 @@
                         </Grid>
                     </Grid>
 
-                    <!-- PLAYER STAT SECTION HEADER -->
-                    <Label Content="FULL STATS" FontSize="15" FontWeight="Medium" Grid.Row="2" VerticalAlignment="Top" Height="28" Margin="0,5,0,0" Width="88"/>
+                    <!-- PLAYER STAT SECTION -->
+                    <Grid Grid.Row="3" Style="{StaticResource GridStyle}">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="1*"/>
+                            <RowDefinition Height="1*"/>
+                            <RowDefinition Height="1*"/>
+                            <RowDefinition Height="3*"/>
+                        </Grid.RowDefinitions>
 
-                    <!-- PLAYER TOTAL STATS -->
-                    <DataGrid x:Name="TotalStatsDG" Grid.Row="2" Style="{StaticResource DataGridStyle}" Margin="0,33,0,1" Grid.RowSpan="2">
-                        <DataGrid.Resources>
-                            <Style BasedOn="{StaticResource {x:Type DataGridColumnHeader}}" TargetType="{x:Type DataGridColumnHeader}">
-                                <Setter Property="Background" Value="Black"/>
-                                <Setter Property="Foreground" Value="White"/>
-                                <Setter Property="FontWeight" Value="SemiBold"/>
-                            </Style>
-                            <Style TargetType="DataGridRow" BasedOn="{StaticResource DataGridRowStyle}"/>
-                        </DataGrid.Resources>
+                        <!-- STAT SECTION HEADER -->
+                        <Border BorderBrush="{StaticResource WhiteBrush}" BorderThickness="1">
+                            <Label Content="FULL STATS" FontSize="15" FontWeight="Medium" VerticalAlignment="Center"/>
+                        </Border>
 
-                        <!-- SPECIFY COLUMN HEADERS -->
-                        <DataGrid.Columns >
-                            <DataGridTextColumn Header="Total Gol" Binding="{Binding total_gol}" Width="1*"></DataGridTextColumn>
-                            <DataGridTextColumn Header="Total Att" Binding="{Binding total_att}" Width="1*"></DataGridTextColumn>
-                            <DataGridTextColumn Header="Total Ast" Binding="{Binding total_ast}" Width="1*"></DataGridTextColumn>
-                            <DataGridTextColumn Header="Total Blk" Binding="{Binding total_blk}" Width="1*"></DataGridTextColumn>
-                            <DataGridTextColumn Header="Total Stl" Binding="{Binding total_stl}" Width="1*"></DataGridTextColumn>
-                            <DataGridTextColumn Header="Total Exl" Binding="{Binding total_exl}" Width="1*"></DataGridTextColumn>
-                            <DataGridTextColumn Header="Total Tov" Binding="{Binding total_tov}" Width="1*"></DataGridTextColumn>
-                        </DataGrid.Columns>
-                    </DataGrid>
+                        <!-- PLAYER TOTAL STATS -->
+                        <DataGrid x:Name="TotalStatsDG" Grid.Row="1" Style="{StaticResource DataGridStyle}">
+                            <DataGrid.Resources>
+                                <Style BasedOn="{StaticResource {x:Type DataGridColumnHeader}}" TargetType="{x:Type DataGridColumnHeader}">
+                                    <Setter Property="Background" Value="Black"/>
+                                    <Setter Property="Foreground" Value="White"/>
+                                    <Setter Property="FontWeight" Value="SemiBold"/>
+                                </Style>
+                                <Style TargetType="DataGridRow" BasedOn="{StaticResource DataGridRowStyle}"/>
+                            </DataGrid.Resources>
 
-                    <!-- STATS PER GAME -->
-                    <DataGrid x:Name="StatsPerGameDG" Grid.Row="4" Style="{StaticResource DataGridStyle}" Margin="0,0,0,121" Grid.RowSpan="2">
-                        <DataGrid.Resources>
-                            <Style BasedOn="{StaticResource {x:Type DataGridColumnHeader}}" TargetType="{x:Type DataGridColumnHeader}">
-                                <Setter Property="Background" Value="Black"/>
-                                <Setter Property="Foreground" Value="White"/>
-                                <Setter Property="FontWeight" Value="SemiBold"/>
-                            </Style>
-                            <Style TargetType="DataGridRow" BasedOn="{StaticResource DataGridRowStyle}"/>
-                        </DataGrid.Resources>
+                            <!-- SPECIFY COLUMN HEADERS -->
+                            <DataGrid.Columns >
+                                <DataGridTextColumn Header="Total Gol" Binding="{Binding total_gol}" Width="1*"></DataGridTextColumn>
+                                <DataGridTextColumn Header="Total Att" Binding="{Binding total_att}" Width="1*"></DataGridTextColumn>
+                                <DataGridTextColumn Header="Total Ast" Binding="{Binding total_ast}" Width="1*"></DataGridTextColumn>
+                                <DataGridTextColumn Header="Total Blk" Binding="{Binding total_blk}" Width="1*"></DataGridTextColumn>
+                                <DataGridTextColumn Header="Total Stl" Binding="{Binding total_stl}" Width="1*"></DataGridTextColumn>
+                                <DataGridTextColumn Header="Total Exl" Binding="{Binding total_exl}" Width="1*"></DataGridTextColumn>
+                                <DataGridTextColumn Header="Total Tov" Binding="{Binding total_tov}" Width="1*"></DataGridTextColumn>
+                            </DataGrid.Columns>
+                        </DataGrid>
 
-                        <!-- SPECIFY COLUMN HEADERS -->
-                        <DataGrid.Columns >
-                            <DataGridTextColumn Header="PPG" Binding="{Binding ppg}" Width="1*"></DataGridTextColumn>
-                            <DataGridTextColumn Header="AttPG" Binding="{Binding mpg}" Width="1*"></DataGridTextColumn>
-                            <DataGridTextColumn Header="Shot%" Binding="{Binding shot_pct}" Width="1*"></DataGridTextColumn>
-                            <DataGridTextColumn Header="APG" Binding="{Binding apg}" Width="1*"></DataGridTextColumn>
-                            <DataGridTextColumn Header="BPG" Binding="{Binding bpg}" Width="1*"></DataGridTextColumn>
-                            <DataGridTextColumn Header="SPG" Binding="{Binding spg}" Width="1*"></DataGridTextColumn>
-                            <DataGridTextColumn Header="EPG" Binding="{Binding epg}" Width="1*"></DataGridTextColumn>
-                            <DataGridTextColumn Header="TPG" Binding="{Binding tpg}" Width="1*"></DataGridTextColumn>
-                        </DataGrid.Columns>
-                    </DataGrid>
+                        <!-- STATS PER GAME -->
+                        <DataGrid x:Name="StatsPerGameDG" Grid.Row="2" Style="{StaticResource DataGridStyle}">
+                            <DataGrid.Resources>
+                                <Style BasedOn="{StaticResource {x:Type DataGridColumnHeader}}" TargetType="{x:Type DataGridColumnHeader}">
+                                    <Setter Property="Background" Value="Black"/>
+                                    <Setter Property="Foreground" Value="White"/>
+                                    <Setter Property="FontWeight" Value="SemiBold"/>
+                                </Style>
+                                <Style TargetType="DataGridRow" BasedOn="{StaticResource DataGridRowStyle}"/>
+                            </DataGrid.Resources>
 
-                    <!-- STATS BY GAME -->
-                    <DataGrid x:Name="GameStatsDG" Grid.Row="4" Style="{StaticResource DataGridStyle}" Margin="0,32,0,2" Grid.RowSpan="2">
-                        <DataGrid.Resources>
-                            <Style BasedOn="{StaticResource {x:Type DataGridColumnHeader}}" TargetType="{x:Type DataGridColumnHeader}">
-                                <Setter Property="Background" Value="Black"/>
-                                <Setter Property="Foreground" Value="White"/>
-                                <Setter Property="FontWeight" Value="SemiBold"/>
-                            </Style>
-                            <Style TargetType="DataGridRow" BasedOn="{StaticResource DataGridRowStyle}"/>
-                        </DataGrid.Resources>
+                            <!-- SPECIFY COLUMN HEADERS -->
+                            <DataGrid.Columns >
+                                <DataGridTextColumn Header="PPG" Binding="{Binding ppg}" Width="1*"></DataGridTextColumn>
+                                <DataGridTextColumn Header="AttPG" Binding="{Binding mpg}" Width="1*"></DataGridTextColumn>
+                                <DataGridTextColumn Header="Shot%" Binding="{Binding shot_pct}" Width="1*"></DataGridTextColumn>
+                                <DataGridTextColumn Header="APG" Binding="{Binding apg}" Width="1*"></DataGridTextColumn>
+                                <DataGridTextColumn Header="BPG" Binding="{Binding bpg}" Width="1*"></DataGridTextColumn>
+                                <DataGridTextColumn Header="SPG" Binding="{Binding spg}" Width="1*"></DataGridTextColumn>
+                                <DataGridTextColumn Header="EPG" Binding="{Binding epg}" Width="1*"></DataGridTextColumn>
+                                <DataGridTextColumn Header="TPG" Binding="{Binding tpg}" Width="1*"></DataGridTextColumn>
+                            </DataGrid.Columns>
+                        </DataGrid>
 
-                        <!-- SPECIFY COLUMN HEADERS -->
-                        <DataGrid.Columns >
-                            <DataGridTextColumn Header="Vs." Binding="{Binding opp_team}" Width="3*"></DataGridTextColumn>
-                            <DataGridTextColumn Header="Gol" Binding="{Binding total_gol}" Width="1*"></DataGridTextColumn>
-                            <DataGridTextColumn Header="Att" Binding="{Binding total_att}" Width="1*"></DataGridTextColumn>
-                            <DataGridTextColumn Header="Ast" Binding="{Binding total_ast}" Width="1*"></DataGridTextColumn>
-                            <DataGridTextColumn Header="Blk" Binding="{Binding total_blk}" Width="1*"></DataGridTextColumn>
-                            <DataGridTextColumn Header="Stl" Binding="{Binding total_stl}" Width="1*"></DataGridTextColumn>
-                            <DataGridTextColumn Header="Exl" Binding="{Binding total_exl}" Width="1*"></DataGridTextColumn>
-                            <DataGridTextColumn Header="T/Over" Binding="{Binding total_tov}" Width="1*"></DataGridTextColumn>
-                        </DataGrid.Columns>
-                    </DataGrid>
+                        <!-- STATS BY GAME -->
+                        <DataGrid x:Name="GameStatsDG" Grid.Row="3" Style="{StaticResource DataGridStyle}">
+                            <DataGrid.Resources>
+                                <Style BasedOn="{StaticResource {x:Type DataGridColumnHeader}}" TargetType="{x:Type DataGridColumnHeader}">
+                                    <Setter Property="Background" Value="Black"/>
+                                    <Setter Property="Foreground" Value="White"/>
+                                    <Setter Property="FontWeight" Value="SemiBold"/>
+                                </Style>
+                                <Style TargetType="DataGridRow" BasedOn="{StaticResource DataGridRowStyle}"/>
+                            </DataGrid.Resources>
+
+                            <!-- SPECIFY COLUMN HEADERS -->
+                            <DataGrid.Columns >
+                                <DataGridTextColumn Header="Vs." Binding="{Binding opp_team}" Width="3*"></DataGridTextColumn>
+                                <DataGridTextColumn Header="Gol" Binding="{Binding total_gol}" Width="1*"></DataGridTextColumn>
+                                <DataGridTextColumn Header="Att" Binding="{Binding total_att}" Width="1*"></DataGridTextColumn>
+                                <DataGridTextColumn Header="Ast" Binding="{Binding total_ast}" Width="1*"></DataGridTextColumn>
+                                <DataGridTextColumn Header="Blk" Binding="{Binding total_blk}" Width="1*"></DataGridTextColumn>
+                                <DataGridTextColumn Header="Stl" Binding="{Binding total_stl}" Width="1*"></DataGridTextColumn>
+                                <DataGridTextColumn Header="Exl" Binding="{Binding total_exl}" Width="1*"></DataGridTextColumn>
+                                <DataGridTextColumn Header="T/Over" Binding="{Binding total_tov}" Width="1*"></DataGridTextColumn>
+                            </DataGrid.Columns>
+                        </DataGrid>
+                    </Grid>
+
+                   
                 </Grid>
             </Grid>
         </Grid>

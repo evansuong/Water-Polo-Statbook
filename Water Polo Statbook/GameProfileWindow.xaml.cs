@@ -28,10 +28,10 @@ namespace Water_Polo_Statbook
         // myteam reference
         private MyTeam myTeam;
         // reference to mysql connection
-        private MySqlConnection con;
+        private MySqlQueryBuilder build;
 
         // string to hold radiobutton type
-        string btnType;
+        char statType;
 
         // message error constants
         private const string SELECT_QTR_MSG = "please select a quarter";
@@ -40,30 +40,38 @@ namespace Water_Polo_Statbook
 
 
         // query commands
+        private const string SELECT_GOALS_QRY = "select game_stats.total_gol, game_stats_opponent.total_gol as opp_total_gol from game_stats inner join game_stats_opponent on game_stats.game_id = game_stats_opponent.game_id where game_stats.game_id={0}";
         private const string SELECT_OPP_STATS_QRY = "select * from game_stats_opponent where game_id={0}";
         private const string SELECT_GAMEHIST_QRY = "select * from game_history where event_game_id={0}";
         private const string SELECT_PLAYER_NUMS_QRY = "select player_num from player where team_id={0}";
         private const string SELECT_PLAYER_ID_QRY = "select id from player where player_num={0} and team_id={1}";
         private const string SELECT_PLAYER_GAME_STATS_QRY = "select player_num, player_name, total_gol, total_att, total_ast, total_blk, total_stl, total_exl, total_tov, q1_gol, q2_gol, q3_gol, q4_gol, ot_gol, game_id from player inner join game_stats on player.id = game_stats.player_id where game_stats.game_id={0}";
         private const string INSERT_STAT_QRY = "insert into game_history values ({0}, '{1}', {2}, {3}, {4}, NULL)";
+        private const string UPDATE_GAME_RESULT_QRY = "update game set game_result='{0}' where id={1}";
+        private const string DELETE_STAT_QRY = "delete from game where id={0}";
 
-        public GameProfileWindow(Window callingWindow, MyTeam myTeam, MyGame myGame, MySqlConnection con)
+        public GameProfileWindow(Window callingWindow, MyTeam myTeam, MyGame myGame, MySqlQueryBuilder build)
         {
             this.callingWindow = callingWindow;
             this.myTeam = myTeam;
             this.myGame = myGame;
-            this.con = con;
+            this.build = build;
             InitializeComponent();
+            init();
+        }
 
+        private void init()
+        {
             AddStatPNL.Visibility = Visibility.Hidden;
 
+            Load_Opp_Table();
             Set_Labels();
             Update_Tables();
         }
 
         private void Window_Activated(object sender, EventArgs e)
         {
-
+           
         }
 
         private void AddStatBTN_Click(object sender, RoutedEventArgs e)
@@ -76,41 +84,13 @@ namespace Water_Polo_Statbook
 
         private void RemoveStatBTN_Click(object sender, RoutedEventArgs e)
         {
-
+            Delete_Stat();
         }
 
         private void StatBTN_Checked(object sender, RoutedEventArgs e)
         {
             RadioButton btn = (RadioButton)sender;
-            btnType = btn.Content.ToString();
-
-            switch (btnType)
-            {
-                case "Goal":
-                    btnType = "G";
-                    break;
-                case "Attempt":
-                    btnType = "M";
-                    break;
-                case "Assist":
-                    btnType = "A";
-                    break;
-                case "Block":
-                    btnType = "B";
-                    break;
-                case "Steal":
-                    btnType = "S";
-                    break;
-                case "Exclusion":
-                    btnType = "E";
-                    break;
-                case "Turnover":
-                    btnType = "T";
-                    break;
-                case "Opponent Goal":
-                    btnType = "O";
-                    break;
-            }
+            statType = Set_Stat_Type(btn.Content.ToString());
         }
 
 
@@ -136,94 +116,169 @@ namespace Water_Polo_Statbook
             }
             else
             {
-                // set deafult qtr values
-                int qtr = 1;
-
-                // if qtr = OT replace with 5
-                if (QtrCB.Text.ToString() == "OT")
-                {
-                    qtr = 5;
-                }
-                else
-                {
-                    qtr = Int32.Parse(QtrCB.Text.ToString());
-                }
-
-                // parse player number from combobox
-                int playerNum = Int32.Parse(PlayerCB.Text.ToString());
-
-                // get player id from player number
-                string playerIdQry = string.Format(SELECT_PLAYER_ID_QRY, playerNum, myTeam.GetId());
-                con.Open();
-
-                MySqlDataAdapter sda = new MySqlDataAdapter(playerIdQry, con);
-                DataTable dt = new DataTable();
-                sda.Fill(dt);
-                int playerId = Int32.Parse(dt.Rows[0]["id"].ToString());
-
-                // place btn type into stat type
-                string statType = btnType;
-
-                // insert new game stat into game history and watch the magic unfold
-                string insertQry = string.Format(INSERT_STAT_QRY, qtr, statType, playerId, myGame.GetId(), myTeam.GetId());
-                MySqlCommand msc = new MySqlCommand(insertQry, con);
-                msc.ExecuteNonQuery();
-                con.Close();
-
-                // update all tables
-                Update_Tables();
-
-                AddStatPNL.Visibility = Visibility.Hidden;
-                this.UpdateLayout();
+                Add_Stat();
             }
         }
 
         private void BackBTN_Click(object sender, RoutedEventArgs e)
         {
+            Set_Game_Stats();
+            Update_Team_Stats();
             callingWindow.Show();
             this.Close();
+        }
+
+
+        /* ----------------- HELPER METHODS ------------------- */
+
+        private void Add_Stat()
+        {
+            // set deafult qtr values
+            int qtr = 1;
+
+            // if qtr = OT replace with 5
+            if (QtrCB.Text.ToString() == "OT")
+            {
+                qtr = 5;
+            }
+            else
+            {
+                qtr = Int32.Parse(QtrCB.Text.ToString());
+            }
+
+            // deafult player id
+            int playerId = 0;
+
+            // parse player number from combobox
+            int playerNum = 0;
+
+            // if player is opponent, dont parse player value
+            if (PlayerCB.Text.ToString() == "Opponent")
+            {
+                statType = 'O';
+                playerNum = Int32.Parse(PlayerCB.Items[0].ToString());
+            }
+
+            // if home team stat, parse player id from player number 
+            else
+            {
+                playerNum = Int32.Parse(PlayerCB.Text.ToString());
+            }
+
+            // get player id from player number
+            string selqry = string.Format(SELECT_PLAYER_ID_QRY, playerNum, myTeam.GetId());
+
+            DataTable dt = build.Execute_DataTable_Qry(selqry);
+            playerId = Int32.Parse(dt.Rows[0]["id"].ToString());
+
+            // insert new game stat into game history and watch the magic happen
+            string insqry = string.Format(INSERT_STAT_QRY, qtr, this.statType, playerId, myGame.GetId(), myTeam.GetId());
+            build.Execute_Query(insqry);
+
+            // update all tables
+            Set_Game_Stats();
+            Update_Tables();
+
+            AddStatPNL.Visibility = Visibility.Hidden;
+            this.UpdateLayout();
+        }
+
+        private void Delete_Stat()
+        {
+            // get stat id from game history dg
+            if (GameHistDG.SelectedItems.Count == 1)
+            {
+                var items = GameHistDG.SelectedItems;
+                foreach (DataRowView item in items)
+                {
+                    int id = Int32.Parse(item["id"].ToString());
+
+                    // delete stat that matches stat id
+                    string qry = string.Format(DELETE_STAT_QRY, id);
+                    build.Execute_Query(qry);
+                }
+                // refresh page
+                Load_Opp_Table();
+                Update_Tables();
+            }
+        }
+
+        private void Set_Game_Stats()
+        {
+            // set home and opponent goals of mygame
+            string qry = string.Format(SELECT_GOALS_QRY, myGame.GetId());
+
+            // fill game stats
+            myGame.Set_Stats(build.Execute_DataSet_Query(qry));
+        }
+
+        /// <summary>
+        /// formats stat type to be passed into datatable
+        /// </summary>
+        /// <param name="statType"></param>
+        /// <returns></returns>
+        private char Set_Stat_Type(string btnType)
+        {
+            switch (btnType)
+            {
+                case "Goal":
+                    return 'G';
+                case "Attempt":
+                    return 'M';
+                case "Assist":
+                    return 'A';
+                case "Block":
+                    return 'B';
+                case "Steal":
+                    return 'S';
+                case "Exclusion":
+                    return 'E';
+                case "Turnover":
+                    return 'T';
+            }
+            return 'M';
+        }
+
+        private void Update_Team_Stats()
+        {
+            // check whether game was a win, loss, or tie
+            int homeGoals = myGame.GetHomeGoals();
+            int oppGoals = myGame.GetOppGoals();
+            char result = 'T';
+
+            if (homeGoals > oppGoals)
+            {
+                result = 'W';
+            }
+            else if (homeGoals < oppGoals)
+            {
+                result = 'L';
+            }
+
+            // update game result in database
+            string qry = string.Format(UPDATE_GAME_RESULT_QRY, result, myGame.GetId());
+            build.Execute_Query(qry);
         }
 
         private void Load_Team_Table()
         {
             // join player and game_stats tables and load into main data table
             string qry = string.Format(SELECT_PLAYER_GAME_STATS_QRY, myGame.GetId());
-            con.Open();
-
-            MySqlDataAdapter sda = new MySqlDataAdapter(qry, con);
-            DataTable dt = new DataTable();
-            sda.Fill(dt);
-            con.Close();
-
-            HomeDG.ItemsSource = dt.DefaultView;
+            HomeDG.ItemsSource = build.Execute_DataTable_Qry(qry).DefaultView;
         }
 
         private void Load_Opp_Table()
         {
             // get all data grom game_stats_opponent for this game
             string qry = string.Format(SELECT_OPP_STATS_QRY, myGame.GetId());
-            con.Open();
-
-            MySqlDataAdapter sda = new MySqlDataAdapter(qry, con);
-            DataTable dt = new DataTable();
-            sda.Fill(dt);
-            con.Close();
-
-            OppDG.ItemsSource = dt.DefaultView;
+            OppDG.ItemsSource = build.Execute_DataTable_Qry(qry).DefaultView;
         }
 
         private void Load_Game_History_Table()
         {
             // get all data grom game_stats_opponent for this game
             string qry = string.Format(SELECT_GAMEHIST_QRY, myGame.GetId());
-            con.Open();
-
-            MySqlDataAdapter sda = new MySqlDataAdapter(qry, con);
-            DataTable dt = new DataTable();
-            sda.Fill(dt);
-            con.Close();
-
-            GameHistDG.ItemsSource = dt.DefaultView;
+            GameHistDG.ItemsSource = build.Execute_DataTable_Qry(qry).DefaultView;
         }
 
         private void Load_Players()
@@ -233,21 +288,21 @@ namespace Water_Polo_Statbook
 
             // find team player names 
             string qry = string.Format(SELECT_PLAYER_NUMS_QRY, myGame.GetTeamId());
-            con.Open();
-
-            MySqlDataAdapter sda = new MySqlDataAdapter(qry, con);
-            DataTable dt = new DataTable();
-            con.Close();
-
-            sda.Fill(dt);
+            DataTable dt = build.Execute_DataTable_Qry(qry);
 
             // load all player names into combobox
             foreach (DataRow row in dt.Rows)
             {
                 PlayerCB.Items.Add(row["player_num"].ToString());
             }
+
+            // add opponent into combobox 
+            PlayerCB.Items.Add("Opponent");
         }
 
+        /// <summary>
+        /// set all label data context
+        /// </summary>
         private void Set_Labels()
         {
             // give value to all properties in model object
@@ -256,7 +311,9 @@ namespace Water_Polo_Statbook
                 GameName = myGame.GetName(),
                 GameType = myGame.GetGameType(),
                 GameLoc = myGame.GetLoc(),
-                GameDate = myGame.GetDate()
+                GameDate = myGame.GetDate(),
+                HomeGoals = myGame.GetHomeGoals().ToString(),
+                OppGoals = myGame.GetOppGoals().ToString()
             };
 
             // set all data context bindings for labels in team main window
@@ -264,14 +321,25 @@ namespace Water_Polo_Statbook
             TypeLBL.DataContext = ControlDC;
             LocLBL.DataContext = ControlDC;
             DateLBL.DataContext = ControlDC;
+            HomeGoalsLBL.DataContext = ControlDC;
+            OppGoalsLBL.DataContext = ControlDC;
         }
 
+        /// <summary>
+        /// update content of all tables in window
+        /// </summary>
         private void Update_Tables()
         {
-            Load_Team_Table();
+            if (statType == 'O')
+            {
+                Load_Opp_Table();
+            }
+            else
+            {
+                Load_Team_Table();
+            }
+            Set_Labels();
             Load_Game_History_Table();
-            Load_Opp_Table();
-            Load_Players();
         }
     }
 }

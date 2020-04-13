@@ -22,7 +22,7 @@ namespace Water_Polo_Statbook
         // calling window reference
         private Window callingWindow;
         // mysql connection reference
-        private MySqlConnection con;
+        private MySqlQueryBuilder build;
         // myplayer reference
         private MyPlayer myPlayer;
         //my team reference
@@ -37,10 +37,10 @@ namespace Water_Polo_Statbook
         private const string SELECT_GAMESTATS_QRY = "select opp_team, total_gol, total_att, total_ast, total_blk, total_stl, total_exl, total_tov from game_stats inner join game on game_stats.game_id = game.id where player_id={0}";
         private const string UPDATE_PLAYER_QRY = "update player set player_num={0}, player_name='{1}', player_pos='{2}', player_year={3}, player_height={4}, player_weight={5} where id={6}";
         
-        public PlayerProfileWindow(Window callingWindow, MyTeam myTeam, MyPlayer myPlayer, MySqlConnection con)
+        public PlayerProfileWindow(Window callingWindow, MyTeam myTeam, MyPlayer myPlayer, MySqlQueryBuilder build)
         {
             this.callingWindow = callingWindow;
-            this.con = con;
+            this.build = build;
             this.myPlayer = myPlayer;
             this.myTeam = myTeam;
             this.editmode = false;
@@ -91,27 +91,9 @@ namespace Water_Polo_Statbook
         /* ---------------- HELPER METHODS ---------------- */
         private void Load_Totalstat_Table()
         {
-            try
-            {
-                // get all stats from totalstats table 
-                string qry = string.Format(SELECT_TOTALSTATS_QRY, myPlayer.GetId());
-                con.Open();
-
-                // run sql query and populate total stats datagrid
-                MySqlDataAdapter sda = new MySqlDataAdapter(qry, con);
-                DataTable dt = new DataTable();
-                sda.Fill(dt);
-                con.Close();
-
-                TotalStatsDG.ItemsSource = dt.DefaultView;
-            }
-            catch (Exception e)
-            {
-                MessageBox.Show(e.ToString());
-            }
-
-            if (con.State == ConnectionState.Open)
-                con.Close();
+            // get all stats from totalstats table 
+            string qry = string.Format(SELECT_TOTALSTATS_QRY, myPlayer.GetId());
+            TotalStatsDG.ItemsSource = build.Execute_DataTable_Qry(qry).DefaultView;
         }
 
         private void Load_StatsPG_Table()
@@ -133,7 +115,7 @@ namespace Water_Polo_Statbook
             DataRow player = dt.NewRow();
             player["ppg"] = Calculate_Avg(myPlayer.GetTotalGoals(), gamesPlayed);
             player["mpg"] = Calculate_Avg(myPlayer.GetTotalAttempts(), gamesPlayed);
-            player["shot_pct"] = Calculate_Avg(myPlayer.GetTotalGoals(), myPlayer.GetTotalAttempts());
+            player["shot_pct"] = Calculate_Avg(myPlayer.GetTotalGoals(), myPlayer.GetTotalAttempts()) + "%"; 
             player["apg"] = Calculate_Avg(myPlayer.GetTotalAssists(), gamesPlayed);
             player["bpg"] = Calculate_Avg(myPlayer.GetTotalBlocks(), gamesPlayed);
             player["spg"] = Calculate_Avg(myPlayer.GetTotalSteals(), gamesPlayed);
@@ -146,42 +128,29 @@ namespace Water_Polo_Statbook
             StatsPerGameDG.ItemsSource = dt.DefaultView;
         }
 
-        private long Calculate_Avg(int stat, int gp)
+        private string Calculate_Avg(int stat, int gp)
         {
             if (gp == 0)
             {
-                return 0;
+                return "0.0";
+            }
+            else if (stat == 0)
+            {
+                return "0.0";
             }
             else
             {
-                return stat / gp;
+                return string.Format("{0:0.00}", stat / (float)gp);
             }
         }
 
         private void Load_GameStats_Table()
         {
-            try
-            {
-                // get all stats from individual games of this player
-                string qry = string.Format(SELECT_GAMESTATS_QRY, myPlayer.GetId());
-                con.Open();
-
-                // run sql query and populate game stats datagrid
-                MySqlDataAdapter sda = new MySqlDataAdapter(qry, con);
-                DataTable dt = new DataTable();
-                sda.Fill(dt);
-                con.Close();
-
-                GameStatsDG.ItemsSource = dt.DefaultView;
-            }
-            catch (Exception e)
-            {
-                MessageBox.Show(e.ToString());
-            }
-
-            if (con.State == ConnectionState.Open)
-                con.Close();
+            // get all stats from individual games of this player
+            string qry = string.Format(SELECT_GAMESTATS_QRY, myPlayer.GetId());
+            GameStatsDG.ItemsSource = build.Execute_DataTable_Qry(qry).DefaultView;
         }
+
 
         private void Update_Player_Attributes()
         {
@@ -193,30 +162,13 @@ namespace Water_Polo_Statbook
             int playerHeight = Int32.Parse(HeightTB.Text.ToString());
             int playerWeight = Int32.Parse(WeightTB.Text.ToString());
 
-            try
-            {
-                // update player info 
-                string updateQry = string.Format(UPDATE_PLAYER_QRY, playerNum, playerName, playerPos, playerYear, playerHeight, playerWeight, myPlayer.GetId());
-                con.Open();
-                MySqlCommand msc = new MySqlCommand(updateQry, con);
-                msc.ExecuteNonQuery();
+            // update player info 
+            string updqry = string.Format(UPDATE_PLAYER_QRY, playerNum, playerName, playerPos, playerYear, playerHeight, playerWeight, myPlayer.GetId());
+            build.Execute_Query(updqry);
 
-                // update myplayer data fields
-                string selectQry = string.Format(SELECT_PLAYER_QRY, myPlayer.GetId());
-                MySqlDataAdapter sda = new MySqlDataAdapter(selectQry, con);
-                DataSet ds = new DataSet();
-                con.Close();
-                sda.Fill(ds);
-
-                myPlayer.Set_Attributes(ds);
-            }
-            catch (Exception e)
-            {
-                MessageBox.Show(e.ToString());
-            }
-            
-            if (con.State == ConnectionState.Open)
-                con.Close();
+            // update myplayer data fields
+            string selqry = string.Format(SELECT_PLAYER_QRY, myPlayer.GetId());
+            myPlayer.Set_Attributes(build.Execute_DataSet_Query(selqry));
         }
 
         private void Set_Labels()

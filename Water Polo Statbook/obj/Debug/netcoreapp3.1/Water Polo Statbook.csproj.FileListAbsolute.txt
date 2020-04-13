@@ -48,3 +48,5 @@ C:\Users\evans\Desktop\Projects\C#\SQL Tutorials\Water Polo Statbook\Water Polo 
 C:\Users\evans\Desktop\Projects\C#\SQL Tutorials\Water Polo Statbook\Water Polo Statbook\obj\Debug\netcoreapp3.1\AddGameWindow.baml
 C:\Users\evans\Desktop\Projects\C#\SQL Tutorials\Water Polo Statbook\Water Polo Statbook\obj\Debug\netcoreapp3.1\GameProfileWindow.g.cs
 C:\Users\evans\Desktop\Projects\C#\SQL Tutorials\Water Polo Statbook\Water Polo Statbook\obj\Debug\netcoreapp3.1\GameProfileWindow.baml
+C:\Users\evans\Desktop\Projects\C#\SQL Tutorials\Water Polo Statbook\Water Polo Statbook\obj\Debug\netcoreapp3.1\EditGameWindow.g.cs
+C:\Users\evans\Desktop\Projects\C#\SQL Tutorials\Water Polo Statbook\Water Polo Statbook\obj\Debug\netcoreapp3.1\EditGameWindow.baml

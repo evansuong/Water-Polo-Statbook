@@ -27,20 +27,20 @@ namespace Water_Polo_Statbook
         // reference to myTeam
         private MyTeam myTeam;
 
-        // reference to mysqlconnection
-        MySqlConnection con;
+        // reference to mysqlquerybuilder
+        MySqlQueryBuilder build;
 
         // qry constant
         private const string DELETE_TEAM_QRY = "delete from team where id={0}";
         private const string DISABLE_FOREIGN_KEy_QRY = "set FOREIGN_KEY_CHECKS = 0";
 
 
-        public DeleteTeamWindow(Window callingWindow, Window mainWindow, MyTeam myTeam, MySqlConnection con)
+        public DeleteTeamWindow(Window callingWindow, Window mainWindow, MyTeam myTeam, MySqlQueryBuilder build)
         {
             this.callingWindow = callingWindow;
             this.mainWindow = mainWindow;
             this.myTeam = myTeam;
-            this.con = con;
+            this.build = build;
             InitializeComponent();
         }
 
@@ -51,33 +51,18 @@ namespace Water_Polo_Statbook
         /// <param name="e"></param>
         private void YesBTN_Click(object sender, RoutedEventArgs e)
         {
-            try
-            {
-                // delete team from team table
-                con.Open();
+            // disable foreign key checks
+            string setqry = DISABLE_FOREIGN_KEy_QRY;
+            build.Execute_Query(setqry);
 
-                string qry1 = DISABLE_FOREIGN_KEy_QRY;
-                MySqlCommand msc = new MySqlCommand(qry1, con);
-                msc.ExecuteNonQuery();
+            // delete team from data base
+            string delqry = string.Format(DELETE_TEAM_QRY, myTeam.GetId());
+            build.Execute_Query(delqry);
 
-                string qry2 = string.Format(DELETE_TEAM_QRY, myTeam.GetId());
-                msc.CommandText = qry2;
-                msc.ExecuteNonQuery();
-                con.Close();
-
-
-                // take user back to main window
-                mainWindow.Show();
-                callingWindow.Close();
-                this.Close();
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.ToString());
-            }
-
-            if (con.State == System.Data.ConnectionState.Open)
-                con.Close();
+            // take user back to main window
+            mainWindow.Show();
+            callingWindow.Close();
+            this.Close();
         }
 
         /// <summary>

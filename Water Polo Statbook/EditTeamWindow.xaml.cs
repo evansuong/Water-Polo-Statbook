@@ -29,8 +29,8 @@ namespace Water_Polo_Statbook
     public partial class EditTeamWindow : Window
     {
 
-        // SQL objects
-        MySqlConnection con;
+        // reference to mysqlquierybuilder
+        MySqlQueryBuilder build;
 
         // reference to calling window
         private Window callingWindow;
@@ -53,13 +53,13 @@ namespace Water_Polo_Statbook
         private const string SEARCH_PLAYER_BY_ID_QRY = "select * from player where id={0}";
 
 
-        public EditTeamWindow(Window callingWindow, MyTeam myTeam, MyPlayer myPlayer, MySqlConnection con)
+        public EditTeamWindow(Window callingWindow, MyTeam myTeam, MyPlayer myPlayer, MySqlQueryBuilder build)
         {
             InitializeComponent();
             this.callingWindow = callingWindow;
             this.myTeam = myTeam;
             this.myPlayer = myPlayer;
-            this.con = con;
+            this.build = build;
 
             Load_Table_Data();
         }
@@ -124,24 +124,12 @@ namespace Water_Polo_Statbook
         /// </summary>
         private void Load_Table_Data()
         {
-            try
-            {
-                // select all players 
-                string qry = "select * from player where team_id=" + myTeam.GetId();
-                con.Open();
-
-                // build data adapter and use to fill data table
-                MySqlDataAdapter sda = new MySqlDataAdapter(qry, con);
-                DataTable dt = new DataTable();
-                sda.Fill(dt);
-                con.Close();
-                PlayersDT.ItemsSource = dt.DefaultView;
-            }
-            catch (Exception e)
-            {
-                MessageBox.Show(e.ToString());
-            }
+            // select all players 
+            string qry = "select * from player where team_id=" + myTeam.GetId();
+            PlayersDT.ItemsSource = build.Execute_DataTable_Qry(qry).DefaultView;
         }
+
+
 
         /// <summary>
         /// adds player to database player datatable
@@ -194,25 +182,11 @@ namespace Water_Polo_Statbook
             }
 
             // insert player into player data table
-            try
-            {
-                con.Open();
-                string qry = string.Format(INSERT_PLAYER_QRY, playerNum, playerName, playerPos, playerYear, playerHeight, playerWeight, myTeam.GetId());
+            string qry = string.Format(INSERT_PLAYER_QRY, playerNum, playerName, playerPos, playerYear, playerHeight, playerWeight, myTeam.GetId());
+            build.Execute_Query(qry);
 
-                MySqlCommand msc = new MySqlCommand(qry, con);
-                msc.ExecuteNonQuery();
-                con.Close();
-
-                // refresh tabe 
-                Load_Table_Data();
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.ToString());
-            }
-
-            if (con.State == ConnectionState.Open)
-                con.Close();
+            // refresh tabe 
+            Load_Table_Data();
         }
 
         /// <summary>
@@ -222,31 +196,14 @@ namespace Water_Polo_Statbook
         {
             // get player id
             int playerId = myPlayer.GetId();
+            build.Execute_Query(DISABLE_FOREIGN_KEY_QRY);
 
-            try
-            {
-                con.Open();
+            // remove player with id from player data table
+            string qry = string.Format(DELETE_PLAYER_QRY, playerId);
+            build.Execute_Query(qry);
 
-                // disable foreign key checks
-                MySqlCommand msc = new MySqlCommand(DISABLE_FOREIGN_KEY_QRY, con);
-                msc.ExecuteNonQuery();
-
-                // remove player with id from player data table
-                string qry = string.Format(DELETE_PLAYER_QRY, playerId);
-                msc.CommandText = qry;
-                msc.ExecuteNonQuery();
-                con.Close();
-
-                // refresh table
-                Load_Table_Data();
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.ToString());
-            }
-
-            if (con.State == ConnectionState.Open)
-                con.Close();
+            // refresh table
+            Load_Table_Data();
         }
 
         /// <summary>
@@ -254,71 +211,58 @@ namespace Water_Polo_Statbook
         /// </summary>
         private void Update_Player()
         {
+
+            // PARSE PLAYER INFO FROM TEXTBOXES
+            // parse player number
+            string playerNumStr = NumberTB.Text.ToString();
+            int playerNum = 0;
+
             try
             {
-                // PARSE PLAYER INFO FROM TEXTBOXES
-                // parse player number
-                string playerNumStr = NumberTB.Text.ToString();
-                int playerNum = 0;
-
-                try
-                {
-                    playerNum = Int32.Parse(playerNumStr);
-                }
-                catch (FormatException ex)
-                {
-                    string formatError = string.Format(STRING_FORMAT_MSG, "Player Number");
-                    MessageBox.Show(formatError);
-                    return;
-                }
-
-                // parse player name
-                string playerName = NameTB.Text.ToString();
-
-                // parse player position into a char
-                string playerPos = PositionCB.SelectedItem.ToString();
-                playerPos = playerPos.Substring(playerPos.IndexOf(":") + 2);
-
-                // parse player year
-                string playerYearStr = YearCB.SelectedItem.ToString();
-                playerYearStr = playerYearStr.Substring(playerYearStr.IndexOf(":") + 2);
-                int playerYear = Int32.Parse(playerYearStr);
-
-                // parse player weight and height to integers
-                string playerHeightStr = HeightTB.Text.ToString();
-                string playerWeightStr = WeightTB.Text.ToString();
-                int playerHeight, playerWeight;
-
-                try
-                {
-                    playerHeight = Int32.Parse(playerHeightStr);
-                    playerWeight = Int32.Parse(playerWeightStr);
-                }
-                catch (FormatException ex)
-                {
-                    string formatError = string.Format(STRING_FORMAT_MSG, "Player Weight/Height");
-                    MessageBox.Show(formatError);
-                    return;
-                }
-
-                // UPDATE PLAYER INFO BASED ON PLAYER ID
-                con.Open();
-                string qry = string.Format(UPDATE_PLAYER_QRY, playerNum, playerName, playerPos, playerYear, playerHeight, playerWeight, myPlayer.GetId());
-
-                MySqlCommand msc = new MySqlCommand(qry, con);
-                msc.ExecuteNonQuery();
-                con.Close();
-
-                // refresh table
-                Load_Table_Data();
+                playerNum = Int32.Parse(playerNumStr);
             }
-            catch (Exception ex)
+            catch (FormatException ex)
             {
-                MessageBox.Show(ex.ToString());
+                string formatError = string.Format(STRING_FORMAT_MSG, "Player Number");
+                MessageBox.Show(formatError);
+                return;
             }
 
-            if (con.State == ConnectionState.Open)
-                con.Close();
+            // parse player name
+            string playerName = NameTB.Text.ToString();
+
+            // parse player position into a char
+            string playerPos = PositionCB.SelectedItem.ToString();
+            playerPos = playerPos.Substring(playerPos.IndexOf(":") + 2);
+
+            // parse player year
+            string playerYearStr = YearCB.SelectedItem.ToString();
+            playerYearStr = playerYearStr.Substring(playerYearStr.IndexOf(":") + 2);
+            int playerYear = Int32.Parse(playerYearStr);
+
+            // parse player weight and height to integers
+            string playerHeightStr = HeightTB.Text.ToString();
+            string playerWeightStr = WeightTB.Text.ToString();
+            int playerHeight, playerWeight;
+
+            try
+            {
+                playerHeight = Int32.Parse(playerHeightStr);
+                playerWeight = Int32.Parse(playerWeightStr);
+            }
+            catch (FormatException ex)
+            {
+                string formatError = string.Format(STRING_FORMAT_MSG, "Player Weight/Height");
+                MessageBox.Show(formatError);
+                return;
+            }
+
+            // update player info based on id
+            string qry = string.Format(UPDATE_PLAYER_QRY, playerNum, playerName, playerPos, playerYear, playerHeight, playerWeight, myPlayer.GetId());
+            build.Execute_Query(qry);
+
+            // refresh table
+            Load_Table_Data();
         }
 
 
@@ -337,26 +281,11 @@ namespace Water_Polo_Statbook
                     string playerIdStr = item["id"].ToString();
                     int playerId = Int32.Parse(playerIdStr);
 
-                    try
-                    {
-                        // build dataset from player id
-                        con.Open();
-                        string qry = string.Format(SEARCH_PLAYER_BY_ID_QRY, playerId);
-                        MySqlDataAdapter sda = new MySqlDataAdapter(qry, con);
-                        DataSet ds = new DataSet();
-                        sda.Fill(ds);
-                        con.Close();
-
-                        myPlayer.Set_Attributes(ds);
-                    }
-                    catch (Exception e)
-                    {
-                        MessageBox.Show(e.ToString());
-                    }
+                    // build dataset from playey id
+                    string qry = string.Format(SEARCH_PLAYER_BY_ID_QRY, playerId);
+                    myPlayer.Set_Attributes(build.Execute_DataSet_Query(qry));
                 }
             }
-            if (con.State == ConnectionState.Open)
-                con.Close();
         }
 
         /// <summary>
@@ -420,34 +349,12 @@ namespace Water_Polo_Statbook
             // get student id from search box
             string playerName = PlayerSearchTB.Text.ToString();
 
-            try
-            {
-                // search player info by name
-                string qry = string.Format(SEARCH_PLAYER_BY_NAME_QRY, playerName, myTeam.GetId());
-                con.Open();
+            // search player info by name
+            string qry = string.Format(SEARCH_PLAYER_BY_NAME_QRY, playerName, myTeam.GetId());
 
-                // fill data table with player info that was found
-                MySqlDataAdapter sda = new MySqlDataAdapter(qry, con);
-                DataTable dt = new DataTable();
-                sda.Fill(dt);
-
-                // fill mu player with player info that was found
-                DataSet ds = new DataSet();
-                sda.Fill(ds);
-                con.Close();
-
-                myPlayer.Set_Attributes(ds);
-                PlayersDT.ItemsSource = dt.DefaultView;
-
-
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.ToString());
-            }
-
-            if (con.State == ConnectionState.Open)
-                con.Close();
+            // set player attrivutes and player by searched player
+            //myPlayer.Set_Attributes(build.Execute_DataSet_Query(qry));
+            PlayersDT.ItemsSource = build.Execute_DataTable_Qry(qry).DefaultView;
         }
     }
 }

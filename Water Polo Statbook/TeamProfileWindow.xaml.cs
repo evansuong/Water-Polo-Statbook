@@ -20,7 +20,7 @@ namespace Water_Polo_Statbook
     public partial class TeamProfileWindow : Window
     {
         // mysql connection reference
-        private MySqlConnection con;
+        private MySqlQueryBuilder build;
         // myteam reference
         private MyTeam myTeam;
         // calling window reference
@@ -29,11 +29,11 @@ namespace Water_Polo_Statbook
         // query constants
         private const string SELECT_TEAM_GAMESTATS_QRY = "select wins, losses, games_played, league_wins, league_losses, league_games_played from team_stats where team_id={0}";
         private const string SELECT_TEAM_TOTALSTATS_QRY = "select total_gol, total_ast, total_blk, total_stl, total_exl, total_tov from team_stats where team_id={0}";
-        public TeamProfileWindow(Window callingWindow, MyTeam myTeam, MySqlConnection con)
+        public TeamProfileWindow(Window callingWindow, MyTeam myTeam, MySqlQueryBuilder build)
         {
             this.callingWindow = callingWindow;
             this.myTeam = myTeam;
-            this.con = con;
+            this.build = build;
             InitializeComponent();
 
             Load_Gamestat_Table();
@@ -47,12 +47,7 @@ namespace Water_Polo_Statbook
         {
             // load team game stats data
             string qry = string.Format(SELECT_TEAM_GAMESTATS_QRY, myTeam.GetId());
-            con.Open();
-
-            MySqlDataAdapter sda = new MySqlDataAdapter(qry, con);
-            DataTable dt = new DataTable();
-            sda.Fill(dt);
-            con.Close();
+            DataTable dt = build.Execute_DataTable_Qry(qry);
 
             // add columns not in datatable 
             dt.Columns.Add("win_pct");
@@ -73,12 +68,7 @@ namespace Water_Polo_Statbook
         {
             // load team total stats data
             string qry = string.Format(SELECT_TEAM_TOTALSTATS_QRY, myTeam.GetId());
-            con.Open();
-
-            MySqlDataAdapter sda = new MySqlDataAdapter(qry, con);
-            DataTable dt = new DataTable();
-            sda.Fill(dt);
-            con.Close();
+            DataTable dt = build.Execute_DataTable_Qry(qry);
 
             // add columns not in datatable 
             dt.Columns.Add("ppg");

@@ -9,6 +9,7 @@
       "Water Polo Statbook/1.0.0": {
         "dependencies": {
           "MySql.Data": "8.0.19",
+          "System.Collections": "4.3.0",
           "System.Data.SqlClient": "4.8.1"
         },
         "runtime": {

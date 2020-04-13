@@ -10,11 +10,11 @@ none
 false
 TRACE;DEBUG;NETCOREAPP;NETCOREAPP3_1
 C:\Users\evans\Desktop\Projects\C#\SQL Tutorials\Water Polo Statbook\Water Polo Statbook\App.xaml
-9-142263899
+10-1836740399
 
-111234555709
+132119215573
 200-534528449
-AddGameWindow.xaml;AddTeamWindow.xaml;DeleteTeamWindow.xaml;EditTeamWindow.xaml;GameProfileWindow.xaml;MainWindow.xaml;PlayerProfileWindow.xaml;TeamMainWindow.xaml;TeamProfileWindow.xaml;
+AddGameWindow.xaml;AddTeamWindow.xaml;DeleteTeamWindow.xaml;EditGameWindow.xaml;EditTeamWindow.xaml;GameProfileWindow.xaml;MainWindow.xaml;PlayerProfileWindow.xaml;TeamMainWindow.xaml;TeamProfileWindow.xaml;
 
 False
 

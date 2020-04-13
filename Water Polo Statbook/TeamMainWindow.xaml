@@ -6,8 +6,7 @@
         xmlns:local="clr-namespace:Water_Polo_Statbook"
         mc:Ignorable="d"
         Title="TeamMainWindow" Height="720" Width="1080"
-        WindowStartupLocation="CenterScreen"
-        Activated="Window_Activated"
+        WindowStartupLocation="CenterScreen"    
         WindowStyle="None">
     <Grid>
 
@@ -242,7 +241,7 @@
                         <DataGridTextColumn Header="VS" Binding="{Binding opp_team}" Width="5*"/>
                         <DataGridTextColumn Header="W/L" Binding="{Binding game_result}" Width="2*"/>
                         <DataGridTextColumn Header="SCORE" Binding="{Binding game_score}" Width="2*"/>
-                        <DataGridTextColumn Header="DATE" Binding="{Binding game_date}" Width="4*"/>
+                        <DataGridTextColumn Header="DATE" Binding="{Binding game_date}" Width="6*"/>
                         <DataGridTextColumn Header="@" Binding="{Binding game_location}" Width="1*"/>
                         <DataGridTextColumn Header="TYPE" Binding="{Binding game_type}" Width="3*"/>
                     </DataGrid.Columns>
@@ -338,13 +337,13 @@
                         <StackPanel Grid.Row="2">
                             <Label Content="TEAM LEADERS"/>
                             <Label Content="Goals"/>
-                            <Label Content="Evan"/>
+                            <Label Name="TopGolLBL" Content="{Binding TopGol}"/>
                             <Label Content="Assists"/>
-                            <Label Content="Evan"/>
+                            <Label Name="TopAstLBL" Content="{Binding TopAst}"/>
                             <Label Content="Blocks"/>
-                            <Label Content="Evan"/>
-                            <Label Content="Blocks"/>
-                            <Label Content="Evan"/>
+                            <Label Name="TopBlkLBL" Content="{Binding TopBlk}"/>
+                            <Label Content="Steals"/>
+                            <Label Name="TopStlLBL" Content="{Binding TopStl}"/>
                         </StackPanel>
                     </Border>
                 </Grid>
@@ -356,8 +355,8 @@
                         <ColumnDefinition Width="213*"/>
                     </Grid.ColumnDefinitions>
 
-                    <Label Content="Search Game Name" Style="{StaticResource LabelStyle}" Width="116" VerticalAlignment="Center"/>
-                    <TextBox x:Name="SearchPlayerTB" Grid.Column="1" KeyUp="SearchGameTB_KeyUp"/>
+                    <Label Content="Search Player Name" Style="{StaticResource LabelStyle}" Width="116" VerticalAlignment="Center"/>
+                    <TextBox x:Name="SearchPlayerTB" Grid.Column="1" KeyUp="SearchPlayerTB_KeyUp"/>
                 </Grid>
             </Grid>
         </Grid>

@@ -39,10 +39,10 @@
                             <Setter Property="VerticalAlignment" Value="Center"/>
                         </Style>
                     </StackPanel.Resources>
-                    <Label Name="NameLBL" Content="ND vs. THING"/>
-                    <Label Name="TypeLBL" Content="League"/>
-                    <Label Name="LocLBL" Content="@Home"/>
-                    <Label Name="DateLBL" Content="07-07-2019"/>
+                    <Label Name="NameLBL" Content="{Binding GameName}"/>
+                    <Label Name="TypeLBL" Content="{Binding GameType}"/>
+                    <Label Name="LocLBL" Content="{Binding GameLoc}"/>
+                    <Label Name="DateLBL" Content="{Binding GameDate}"/>
                 </StackPanel>
                 <Button x:Name="BackBTN" Content="BACK" Grid.Column="1" Style="{StaticResource ButtonStyle}" Click="BackBTN_Click"/>
             </Grid>
@@ -75,7 +75,34 @@
                         <RowDefinition/>
                         <RowDefinition Height="8*"/>
                     </Grid.RowDefinitions>
-                    <Label Content="Home Team Stats" Background="Black" BorderBrush="{StaticResource WhiteBrush}" BorderThickness="1" HorizontalAlignment="Stretch" HorizontalContentAlignment="Center"/>
+                    
+                    <!-- HEADER TAB WITH GAME SCORE -->
+                    <Border Background="Black" BorderBrush="{StaticResource WhiteBrush}" BorderThickness="1">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition/>
+                                <ColumnDefinition/>
+                                <ColumnDefinition/>
+                            </Grid.ColumnDefinitions>
+
+                            <!-- HOME TEAM GOALS -->
+                            <StackPanel Orientation="Horizontal">
+                                <Label Content="Home: "/>
+                                <Label Name="HomeGoalsLBL" Content="{Binding HomeGoals}"/>
+                            </StackPanel>
+
+                            <!-- PANEL TITLE -->
+                            <Label Content="Home Team Stats" Grid.Column="1" HorizontalAlignment="Stretch" HorizontalContentAlignment="Center"/>
+
+                            <!-- OPPONENT GOALS -->
+                            <StackPanel Grid.Column="2" HorizontalAlignment="Right" Orientation="Horizontal">
+                                <Label Content="Opponent: "/>
+                                <Label Name="OppGoalsLBL" Content="{Binding OppGoals}"/>
+                            </StackPanel>
+                        </Grid>
+                    </Border>
+
+                    <!-- PLAYER STATS DATA TABLE -->
                     <DataGrid x:Name="HomeDG" Grid.ColumnSpan="2" Grid.Row="1" Style="{StaticResource DataGridStyle}">
                         <DataGrid.Resources>
                             <Style BasedOn="{StaticResource {x:Type DataGridColumnHeader}}" TargetType="{x:Type DataGridColumnHeader}">
@@ -113,7 +140,7 @@
                         <RowDefinition/>
                         <RowDefinition Height="2*"/>
                     </Grid.RowDefinitions>
-                    <Label Content="Team Stats" Background="Black" BorderBrush="{StaticResource WhiteBrush}" BorderThickness="1" HorizontalAlignment="Stretch" HorizontalContentAlignment="Center"/>
+                    <Label Content="Opponent Team Stats" Background="Black" BorderBrush="{StaticResource WhiteBrush}" BorderThickness="1" HorizontalAlignment="Stretch" HorizontalContentAlignment="Center"/>
                     <DataGrid x:Name="OppDG" Grid.Row="1"  Style="{StaticResource DataGridStyle}">
                         <DataGrid.Resources>
                             <Style BasedOn="{StaticResource {x:Type DataGridColumnHeader}}" TargetType="{x:Type DataGridColumnHeader}">
@@ -234,7 +261,7 @@
                             <RadioButton x:Name="BlkBTN" Content="Block" Grid.Column="1" Grid.Row="1" Checked="StatBTN_Checked"/>
                             <RadioButton x:Name="ExlBTN" Content="Exclusion" Grid.Column="1" Grid.Row="2" Checked="StatBTN_Checked"/>
                             <RadioButton x:Name="TovBTN" Content="Turnover" Grid.Column="2" Checked="StatBTN_Checked"/>
-                            <Button x:Name="AddBTN" Content="ADD" Grid.Column="2" Grid.Row="1" Grid.RowSpan="2" VerticalAlignment="Bottom" Click="AddBTN_Click"/>
+                            <Button x:Name="AddBTN" Content="ADD" Grid.Column="2" Grid.Row="1" Grid.RowSpan="2" VerticalAlignment="Stretch" Click="AddBTN_Click"/>
                         </Grid>
                     </Grid>
                 </Grid>

@@ -6050,6 +6050,7 @@
   "projectFileDependencyGroups": {
     ".NETCoreApp,Version=v3.1": [
       "MySql.Data >= 8.0.19",
+      "System.Collections >= 4.3.0",
       "System.Data.SqlClient >= 4.8.1"
     ]
   },
@@ -6093,6 +6094,10 @@
           "MySql.Data": {
             "target": "Package",
             "version": "[8.0.19, )"
+          },
+          "System.Collections": {
+            "target": "Package",
+            "version": "[4.3.0, )"
           },
           "System.Data.SqlClient": {
             "target": "Package",

@@ -27,6 +27,9 @@ namespace Water_Polo_Statbook
         private const string CONSTRING = @"server=localhost;user id=root;database=waterpolo_team_db;PASSWORD=Tsmrth001!";
         private MySqlConnection con;
 
+        // MySqlQueryBuilde Object
+        private MySqlQueryBuilder build;
+
         // Message Constants
         private const string SELECT_TEAM_MSG = "Please Select a Team";
         private const string FOREIGN_KEY_DISABLE_QRY = "set FOREIGN_KEY_CHECKS = 0";
@@ -42,10 +45,13 @@ namespace Water_Polo_Statbook
         // Player Object
         private MyPlayer myPlayer;
 
+  
+
         public MainWindow()
         {
             InitializeComponent();
             this.con = new MySqlConnection(CONSTRING);
+            this.build = new MySqlQueryBuilder(con);
 
             this.myPlayer = new MyPlayer();
             this.myTeam = new MyTeam();
@@ -122,39 +128,25 @@ namespace Water_Polo_Statbook
         /* ---------- HELPER METHODS ----------------*/
 
         /// <summary>
-        /// load data into team datagrid
+        /// load all teams into team datagrid
         /// </summary>
         private void Load_Table_Data()
         {
-
-            try
-            {
-                // select all teams
-                string qry = GET_TEAMS_QRY;
-                con.Open();
-
-                // build data adapter and use to fill data table
-                MySqlDataAdapter sda = new MySqlDataAdapter(qry, con);
-                DataTable dt = new DataTable();
-                sda.Fill(dt);
-                con.Close();
-                TeamsDT.ItemsSource = dt.DefaultView;
-            }
-            catch (Exception e)
-            {
-                MessageBox.Show(e.ToString());
-            }
-
-            if (con.State == ConnectionState.Open)
-                con.Close();
+            // select all teams
+            string qry = GET_TEAMS_QRY;
+            TeamsDT.ItemsSource = build.Execute_DataTable_Qry(qry).DefaultView;
         }
 
+
+        /// <summary>
+        /// takes user to edit window of selected team
+        /// </summary>
         private void Edit_Team()
         {
             // check if a team is selected
             if (myTeam.HasInfo())
             {
-                EditTeamWindow atw = new EditTeamWindow(this, myTeam, myPlayer, con);
+                EditTeamWindow atw = new EditTeamWindow(this, myTeam, myPlayer, build);
                 atw.Show();
                 this.Hide();
             }
@@ -165,87 +157,69 @@ namespace Water_Polo_Statbook
             }
         }
 
+
+        /// <summary>
+        /// takes user to main window of selected team
+        /// </summary>
         private void View_Team()
         {
             if (myTeam.HasInfo())
             {
-                try
-                {
-                    // select all teams
-                    string qry = string.Format(SELECT_TEAM_STATS_QRY, myTeam.GetId());
-                    con.Open();
+                // select all teams
+                string qry = string.Format(SELECT_TEAM_STATS_QRY, myTeam.GetId());
+                myTeam.Set_Stats(build.Execute_DataSet_Query(qry));
 
-                    // build data adapter and use to fill data table stats
-                    MySqlDataAdapter sda = new MySqlDataAdapter(qry, con);
-                    DataSet ds = new DataSet();
-                    sda.Fill(ds);
-                    con.Close();
-                    myTeam.Set_Stats(ds);
-
-                    // open team main window
-                    TeamMainWindow tmw = new TeamMainWindow(this, myTeam, myPlayer, con);
-                    this.Hide();
-                    tmw.Show();
-                }
-
-                catch (Exception e)
-                {
-                    MessageBox.Show(e.ToString());
-                }
+                // open team main window
+                TeamMainWindow tmw = new TeamMainWindow(this, myTeam, myPlayer, build);
+                this.Hide();
+                tmw.Show();
             }
             else
             {
                 MessageBox.Show(SELECT_TEAM_MSG);
             }
-
-            if (con.State == ConnectionState.Open)
-                con.Close();
         }
 
+        /// <summary>
+        /// takes user to delete window of selected team
+        /// </summary>
         private void Delete_Team()
         {
-            DeleteTeamWindow dtw = new DeleteTeamWindow(this, this, myTeam, con);
+            DeleteTeamWindow dtw = new DeleteTeamWindow(this, this, myTeam, build);
             dtw.Show();
             this.Hide();
         }
 
+
+        /// <summary>
+        /// takes user to add team window
+        /// </summary>
         private void Add_Team()
         {
-            AddTeamWindow atw = new AddTeamWindow(this, myTeam, con);
+            AddTeamWindow atw = new AddTeamWindow(this, myTeam, build);
             atw.Show();
             this.Hide();
         }
 
+
+        /// <summary>
+        /// searches for team by name in database
+        /// </summary>
         private void Search_Team()
         {
-
             // get student id from search box
             string teamName = TeamSearchTB.Text.ToString();
 
-            try
-            {
-                con.Open();
-
-                // build and execute select query according to id
-                string qry = string.Format(SEARCH_TEAM_QRY, teamName);
-                MySqlDataAdapter sda = new MySqlDataAdapter(qry, con);
-                DataTable dt = new DataTable();
-                sda.Fill(dt);
-                con.Close();
-                TeamsDT.ItemsSource = dt.DefaultView;
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.ToString());
-            }
+            // build and execute select query according to id
+            string qry = string.Format(SEARCH_TEAM_QRY, teamName);
+            TeamsDT.ItemsSource = build.Execute_DataTable_Qry(qry).DefaultView;
         }
 
         /// <summary>
-        /// fills myteam attributes of select team
+        /// fills myteam attributes of selected team
         /// </summary>
         private void Set_Team_Attributes()
         {
-            string name;
             int id;
             // set team name and id if a team is selected
             if (TeamsDT.SelectedItems.Count == 1)
@@ -254,31 +228,14 @@ namespace Water_Polo_Statbook
                 foreach (DataRowView item in items)
                 {
                     id = Int32.Parse(item["id"].ToString());
-
-                    try
-                    {
-                        // get dataset info from id
-                        con.Open();
-                        string qry = string.Format(SELECT_TEAM_QRY, id);
-                        MySqlDataAdapter sda = new MySqlDataAdapter(qry, con);
-                        DataSet ds = new DataSet();
-                        sda.Fill(ds);
-                        con.Close();
-
-                        myTeam.SetAttributes(ds);
-                    }
-                    catch (Exception e)
-                    {
-                        MessageBox.Show(e.ToString());
-                    }
+                    string qry = string.Format(SELECT_TEAM_QRY, id);
+                    myTeam.SetAttributes(build.Execute_DataSet_Query(qry));
                 }
             }
-
-            if (con.State == ConnectionState.Open)
-                con.Close();
         }
 
-     
+        
+
 
         /* --------- GETTERS AND SETTERS -------------- */
         public MyPlayer GetMyPlayer()
@@ -303,35 +260,38 @@ namespace Water_Polo_Statbook
         private int leagueWins, leagueLosses;
         private string record;
         private string leagueRecord;
-        private long winPct;
-        private long leagueWinPct;
-        private long shotPct;
+        private float winPct;
+        private float leagueWinPct;
+        private float shotPct;
 
         private int totalGoals;
-        private long ppg;
+        private float ppg;
 
         private int totalAttempts;
-        private long mpg;
+        private float mpg;
 
         private int totalAssists;
-        private long apg;
+        private float apg;
 
         private int totalBlocks;
-        private long bpg;
+        private float bpg;
 
         private int totalSteals;
-        private long spg;
+        private float spg;
 
         private int totalExclusions;
-        private long epg;
+        private float epg;
 
         private int totalTurnovers;
-        private long tpg;
+        private float tpg;
 
         private int opponentGoals;
-        private long opg;
+        private float opg;
 
         private string totalScore;
+
+        // playerhighs
+        private string topGol, topAst, topStl, topBlk;
 
         // string formats
         private const string RECORD_FMT = "{0}-{1}";
@@ -388,15 +348,15 @@ namespace Water_Polo_Statbook
             }
             else
             {
-                this.winPct = wins / gamesPlayed;
-                this.ppg = totalGoals / gamesPlayed;
-                this.mpg = totalAttempts / gamesPlayed;
-                this.apg = totalAssists / gamesPlayed;
-                this.bpg = totalBlocks / gamesPlayed;
-                this.spg = totalSteals / gamesPlayed;
-                this.epg = totalExclusions / gamesPlayed;
-                this.tpg = totalTurnovers / gamesPlayed;
-                this.opg = opponentGoals / gamesPlayed;
+                this.winPct = Calculate_Avg(wins, wins + losses) * 100; 
+                this.ppg = Calculate_Avg(totalGoals, gamesPlayed);
+                this.mpg = Calculate_Avg(totalAttempts, gamesPlayed);
+                this.apg = Calculate_Avg(totalAssists, gamesPlayed);
+                this.bpg = Calculate_Avg(totalBlocks, gamesPlayed);
+                this.spg = Calculate_Avg(totalSteals, gamesPlayed);
+                this.epg = Calculate_Avg(totalExclusions, gamesPlayed);
+                this.tpg = Calculate_Avg(totalTurnovers, gamesPlayed);
+                this.opg = Calculate_Avg(opponentGoals, gamesPlayed);
             }
 
             // get league win pct
@@ -404,9 +364,13 @@ namespace Water_Polo_Statbook
             {
                 leagueWinPct = 0;
             }
+            else if (leagueLosses == 0 && leagueWins > 0)
+            {
+                leagueWinPct = 100;
+            }
             else
             {
-                leagueWinPct = leagueWins / leagueLosses;
+                leagueWinPct = Calculate_Avg(leagueWins, leagueLosses + leagueWins) * 100;
             }
 
             // get shot make pct
@@ -416,8 +380,24 @@ namespace Water_Polo_Statbook
             }
             else
             {
-                shotPct = totalGoals / totalAttempts;
+                shotPct = Calculate_Avg(totalGoals, totalAttempts) * 100;
             }
+        }
+
+        public void Set_Highs(string topGol, string topAst, string topBlk, string topStl)
+        {
+            this.topGol = topGol;
+            this.topAst = topAst;
+            this.topBlk = topBlk;
+            this.topStl = topStl;
+        }
+
+        private float Calculate_Avg(int stat, int div)
+        {
+            if (div == 0)
+                return 0;
+            else
+                return float.Parse(string.Format("{0:0.00}", stat / (float) div));
         }
 
         public string GetName()
@@ -435,7 +415,7 @@ namespace Water_Polo_Statbook
             return this.record;
         }
 
-        public long GetWinPct()
+        public float GetWinPct()
         {
             return this.winPct;
         }
@@ -445,7 +425,7 @@ namespace Water_Polo_Statbook
             return leagueRecord;
         }
 
-        public long GetLeagueWinPct()
+        public float GetLeagueWinPct()
         {
             return leagueWinPct;
         }
@@ -455,7 +435,7 @@ namespace Water_Polo_Statbook
             return totalGoals;
         }
 
-        public long GetPPG()
+        public float GetPPG()
         {
             return ppg;
         }
@@ -465,12 +445,12 @@ namespace Water_Polo_Statbook
             return totalAttempts;
         }
 
-        public long GetMpg()
+        public float GetMpg()
         {
             return mpg;
         }
 
-        public long GetShotPct()
+        public float GetShotPct()
         {
             return shotPct;
         }
@@ -479,30 +459,30 @@ namespace Water_Polo_Statbook
         {
             return totalAssists;
         }
-        public long GetAPG()
+        public float GetAPG()
         {
             return apg;
         }
-        public int GetTotalBlocks()
+        public float GetTotalBlocks()
         {
             return totalBlocks;
         }
-        public long GetBPG()
+        public float GetBPG()
         {
             return bpg;
         }
 
-        public long GetSPG()
+        public float GetSPG()
         {
             return spg;
         }
 
-        public long GetEPG()
+        public float GetEPG()
         {
             return epg;
         }
 
-        public long GetTPG()
+        public float GetTPG()
         {
             return tpg;
         }
@@ -522,6 +502,22 @@ namespace Water_Polo_Statbook
             return this.hasInfo;
         }
 
+        public string GetTopGol()
+        {
+            return topGol;
+        }
+        public string GetTopAst()
+        {
+            return topAst;
+        }
+        public string GetTopBlk()
+        {
+            return topBlk;
+        }
+        public string GetTopStl()
+        {
+            return topStl;
+        }
     }
 
     /// <summary>
@@ -543,19 +539,19 @@ namespace Water_Polo_Statbook
 
         // player stats
         private int totalGoals;
-        private long ppg;
+        private float ppg;
         private int totalAttempts;
-        private long mpg;
+        private float mpg;
         private int totalAssists;
-        private long apg;
+        private float apg;
         private int totalBlocks;
-        private long bpg;
+        private float bpg;
         private int totalSteals;
-        private long spg;
+        private float spg;
         private int totalExclusions;
-        private long epg;
+        private float epg;
         private int totalTurnovers;
-        private long tpg;
+        private float tpg;
 
         public MyPlayer ()
         {
@@ -688,16 +684,59 @@ namespace Water_Polo_Statbook
         private int id;
         private bool hasAttributes = false;
 
+        private int homeGoals;
+        private int oppGoals;
+
+        public MyGame()
+        {
+            init();
+        }
+
+        public void init ()
+        {
+            homeGoals = 0;
+            oppGoals = 0;
+        }
+
+        public void Set_Stats(DataSet ds)
+        {
+            this.homeGoals = Convert.ToInt32(ds.Tables[0].Rows[0]["total_gol"].ToString());
+            this.oppGoals = Convert.ToInt32(ds.Tables[0].Rows[0]["opp_total_gol"].ToString());
+        }
+
         public void Set_Attributes(DataSet ds)
         {
+            // format name
             this.name = ds.Tables[0].Rows[0]["opp_team"].ToString();
+            this.name = "Vs. " + name;
+
+            // format type
             this.type = ds.Tables[0].Rows[0]["game_type"].ToString();
+            if (type == "Tourn.")
+            {
+                type = "Tournament";
+            }
+            else if (type == "Non Lg")
+            {
+                type = "Non League";
+            }
+
+            // format location 
             this.loc = ds.Tables[0].Rows[0]["game_location"].ToString();
+            this.loc = "@" + loc;
+
+            // set all other attributes
             this.date = ds.Tables[0].Rows[0]["game_date"].ToString();
             this.result = ds.Tables[0].Rows[0]["game_result"].ToString();
             this.id = Convert.ToInt32(ds.Tables[0].Rows[0]["id"].ToString());
             this.teamId = Convert.ToInt32(ds.Tables[0].Rows[0]["team_id"].ToString());
+
             this.hasAttributes = true;
+        }
+
+        public void Clear()
+        {
+            hasAttributes = false;
         }
 
         public string GetName()
@@ -732,11 +771,22 @@ namespace Water_Polo_Statbook
         {
             return hasAttributes;
         }
+
+        public int GetHomeGoals()
+        {
+            return homeGoals;
+        }
+
+        public int GetOppGoals()
+        {
+            return oppGoals;
+        }
     }
 
 
     public class MyModelObject
     {
+        // team labels
         public string Record { get; set; }
         public string WinPct { get; set; }
         public string LeagueRecord { get; set; }
@@ -752,17 +802,26 @@ namespace Water_Polo_Statbook
         public string BPG { get; set; }
         public string GamesPlayed { get; set; }
         public string TotalScore { get; set; }
+
+        // player labels
         public string Name { get; set; }
         public string Num { get; set; }
         public string Pos { get; set; }
         public string Year { get; set; }
         public string Height { get; set; }
         public string Weight { get; set; }
+
+        // game labels
         public string GameName { get; set; }
         public string GameType { get; set; }
         public string GameLoc { get; set; }
         public string GameDate { get; set; }
-        public List<string> PlayerNames { get; set; }
+        public string HomeGoals { get; set; }
+        public string OppGoals { get; set; }
+        public string TopGol { get; set; }
+        public string TopAst { get; set; }
+        public string TopBlk { get; set; }
+        public string TopStl { get; set; }
     }
 
 }
