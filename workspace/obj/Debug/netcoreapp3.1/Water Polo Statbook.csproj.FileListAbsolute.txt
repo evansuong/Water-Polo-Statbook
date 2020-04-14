@@ -1,0 +1,50 @@
+C:\Users\evans\Desktop\Projects\C#\SQL Tutorials\Water Polo Statbook\Water Polo Statbook\bin\Debug\netcoreapp3.1\Water Polo Statbook.exe
+C:\Users\evans\Desktop\Projects\C#\SQL Tutorials\Water Polo Statbook\Water Polo Statbook\bin\Debug\netcoreapp3.1\Water Polo Statbook.deps.json
+C:\Users\evans\Desktop\Projects\C#\SQL Tutorials\Water Polo Statbook\Water Polo Statbook\bin\Debug\netcoreapp3.1\Water Polo Statbook.runtimeconfig.json
+C:\Users\evans\Desktop\Projects\C#\SQL Tutorials\Water Polo Statbook\Water Polo Statbook\bin\Debug\netcoreapp3.1\Water Polo Statbook.runtimeconfig.dev.json
+C:\Users\evans\Desktop\Projects\C#\SQL Tutorials\Water Polo Statbook\Water Polo Statbook\bin\Debug\netcoreapp3.1\Water Polo Statbook.dll
+C:\Users\evans\Desktop\Projects\C#\SQL Tutorials\Water Polo Statbook\Water Polo Statbook\bin\Debug\netcoreapp3.1\Water Polo Statbook.pdb
+C:\Users\evans\Desktop\Projects\C#\SQL Tutorials\Water Polo Statbook\Water Polo Statbook\obj\Debug\netcoreapp3.1\Water Polo Statbook.csprojAssemblyReference.cache
+C:\Users\evans\Desktop\Projects\C#\SQL Tutorials\Water Polo Statbook\Water Polo Statbook\obj\Debug\netcoreapp3.1\MainWindow.g.cs
+C:\Users\evans\Desktop\Projects\C#\SQL Tutorials\Water Polo Statbook\Water Polo Statbook\obj\Debug\netcoreapp3.1\App.g.cs
+C:\Users\evans\Desktop\Projects\C#\SQL Tutorials\Water Polo Statbook\Water Polo Statbook\obj\Debug\netcoreapp3.1\Water Polo Statbook_MarkupCompile.cache
+C:\Users\evans\Desktop\Projects\C#\SQL Tutorials\Water Polo Statbook\Water Polo Statbook\obj\Debug\netcoreapp3.1\Water Polo Statbook_MarkupCompile.lref
+C:\Users\evans\Desktop\Projects\C#\SQL Tutorials\Water Polo Statbook\Water Polo Statbook\obj\Debug\netcoreapp3.1\MainWindow.baml
+C:\Users\evans\Desktop\Projects\C#\SQL Tutorials\Water Polo Statbook\Water Polo Statbook\obj\Debug\netcoreapp3.1\Water Polo Statbook.g.resources
+C:\Users\evans\Desktop\Projects\C#\SQL Tutorials\Water Polo Statbook\Water Polo Statbook\obj\Debug\netcoreapp3.1\Water Polo Statbook.AssemblyInfoInputs.cache
+C:\Users\evans\Desktop\Projects\C#\SQL Tutorials\Water Polo Statbook\Water Polo Statbook\obj\Debug\netcoreapp3.1\Water Polo Statbook.AssemblyInfo.cs
+C:\Users\evans\Desktop\Projects\C#\SQL Tutorials\Water Polo Statbook\Water Polo Statbook\obj\Debug\netcoreapp3.1\Water Polo Statbook.dll
+C:\Users\evans\Desktop\Projects\C#\SQL Tutorials\Water Polo Statbook\Water Polo Statbook\obj\Debug\netcoreapp3.1\Water Polo Statbook.pdb
+C:\Users\evans\Desktop\Projects\C#\SQL Tutorials\Water Polo Statbook\Water Polo Statbook\obj\Debug\netcoreapp3.1\Water Polo Statbook.genruntimeconfig.cache
+C:\Users\evans\Desktop\Projects\C#\SQL Tutorials\Water Polo Statbook\Water Polo Statbook\bin\Debug\netcoreapp3.1\System.Data.SqlClient.dll
+C:\Users\evans\Desktop\Projects\C#\SQL Tutorials\Water Polo Statbook\Water Polo Statbook\bin\Debug\netcoreapp3.1\runtimes\win-arm64\native\sni.dll
+C:\Users\evans\Desktop\Projects\C#\SQL Tutorials\Water Polo Statbook\Water Polo Statbook\bin\Debug\netcoreapp3.1\runtimes\win-x64\native\sni.dll
+C:\Users\evans\Desktop\Projects\C#\SQL Tutorials\Water Polo Statbook\Water Polo Statbook\bin\Debug\netcoreapp3.1\runtimes\win-x86\native\sni.dll
+C:\Users\evans\Desktop\Projects\C#\SQL Tutorials\Water Polo Statbook\Water Polo Statbook\bin\Debug\netcoreapp3.1\runtimes\unix\lib\netcoreapp2.1\System.Data.SqlClient.dll
+C:\Users\evans\Desktop\Projects\C#\SQL Tutorials\Water Polo Statbook\Water Polo Statbook\bin\Debug\netcoreapp3.1\runtimes\win\lib\netcoreapp2.1\System.Data.SqlClient.dll
+C:\Users\evans\Desktop\Projects\C#\SQL Tutorials\Water Polo Statbook\Water Polo Statbook\obj\Debug\netcoreapp3.1\Water Polo Statbook.csproj.CopyComplete
+C:\Users\evans\Desktop\Projects\C#\SQL Tutorials\Water Polo Statbook\Water Polo Statbook\bin\Debug\netcoreapp3.1\BouncyCastle.Crypto.dll
+C:\Users\evans\Desktop\Projects\C#\SQL Tutorials\Water Polo Statbook\Water Polo Statbook\bin\Debug\netcoreapp3.1\Google.Protobuf.dll
+C:\Users\evans\Desktop\Projects\C#\SQL Tutorials\Water Polo Statbook\Water Polo Statbook\bin\Debug\netcoreapp3.1\MySql.Data.dll
+C:\Users\evans\Desktop\Projects\C#\SQL Tutorials\Water Polo Statbook\Water Polo Statbook\bin\Debug\netcoreapp3.1\Ubiety.Dns.Core.dll
+C:\Users\evans\Desktop\Projects\C#\SQL Tutorials\Water Polo Statbook\Water Polo Statbook\bin\Debug\netcoreapp3.1\Renci.SshNet.dll
+C:\Users\evans\Desktop\Projects\C#\SQL Tutorials\Water Polo Statbook\Water Polo Statbook\bin\Debug\netcoreapp3.1\SshNet.Security.Cryptography.dll
+C:\Users\evans\Desktop\Projects\C#\SQL Tutorials\Water Polo Statbook\Water Polo Statbook\bin\Debug\netcoreapp3.1\System.Xml.XPath.XmlDocument.dll
+C:\Users\evans\Desktop\Projects\C#\SQL Tutorials\Water Polo Statbook\Water Polo Statbook\obj\Debug\netcoreapp3.1\Water Polo Statbook.csproj.CoreCompileInputs.cache
+C:\Users\evans\Desktop\Projects\C#\SQL Tutorials\Water Polo Statbook\Water Polo Statbook\obj\Debug\netcoreapp3.1\EditTeamWindow.g.cs
+C:\Users\evans\Desktop\Projects\C#\SQL Tutorials\Water Polo Statbook\Water Polo Statbook\obj\Debug\netcoreapp3.1\EditTeamWindow.baml
+C:\Users\evans\Desktop\Projects\C#\SQL Tutorials\Water Polo Statbook\Water Polo Statbook\obj\Debug\netcoreapp3.1\AddTeamWindow.g.cs
+C:\Users\evans\Desktop\Projects\C#\SQL Tutorials\Water Polo Statbook\Water Polo Statbook\obj\Debug\netcoreapp3.1\AddTeamWindow.baml
+C:\Users\evans\Desktop\Projects\C#\SQL Tutorials\Water Polo Statbook\Water Polo Statbook\obj\Debug\netcoreapp3.1\TeamMainWindow.g.cs
+C:\Users\evans\Desktop\Projects\C#\SQL Tutorials\Water Polo Statbook\Water Polo Statbook\obj\Debug\netcoreapp3.1\TeamMainWindow.baml
+C:\Users\evans\Desktop\Projects\C#\SQL Tutorials\Water Polo Statbook\Water Polo Statbook\obj\Debug\netcoreapp3.1\App.baml
+C:\Users\evans\Desktop\Projects\C#\SQL Tutorials\Water Polo Statbook\Water Polo Statbook\obj\Debug\netcoreapp3.1\PlayerProfileWindow.g.cs
+C:\Users\evans\Desktop\Projects\C#\SQL Tutorials\Water Polo Statbook\Water Polo Statbook\obj\Debug\netcoreapp3.1\PlayerProfileWindow.baml
+C:\Users\evans\Desktop\Projects\C#\SQL Tutorials\Water Polo Statbook\Water Polo Statbook\obj\Debug\netcoreapp3.1\TeamProfileWindow.g.cs
+C:\Users\evans\Desktop\Projects\C#\SQL Tutorials\Water Polo Statbook\Water Polo Statbook\obj\Debug\netcoreapp3.1\TeamProfileWindow.baml
+C:\Users\evans\Desktop\Projects\C#\SQL Tutorials\Water Polo Statbook\Water Polo Statbook\obj\Debug\netcoreapp3.1\AddGameWindow.g.cs
+C:\Users\evans\Desktop\Projects\C#\SQL Tutorials\Water Polo Statbook\Water Polo Statbook\obj\Debug\netcoreapp3.1\AddGameWindow.baml
+C:\Users\evans\Desktop\Projects\C#\SQL Tutorials\Water Polo Statbook\Water Polo Statbook\obj\Debug\netcoreapp3.1\GameProfileWindow.g.cs
+C:\Users\evans\Desktop\Projects\C#\SQL Tutorials\Water Polo Statbook\Water Polo Statbook\obj\Debug\netcoreapp3.1\GameProfileWindow.baml
+C:\Users\evans\Desktop\Projects\C#\SQL Tutorials\Water Polo Statbook\Water Polo Statbook\obj\Debug\netcoreapp3.1\EditGameWindow.g.cs
+C:\Users\evans\Desktop\Projects\C#\SQL Tutorials\Water Polo Statbook\Water Polo Statbook\obj\Debug\netcoreapp3.1\EditGameWindow.baml

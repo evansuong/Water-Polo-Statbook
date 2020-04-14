@@ -1,0 +1,41 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.WindowsDesktop">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <RootNamespace>Water_Polo_Statbook</RootNamespace>
+    <UseWPF>true</UseWPF>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="res\background.jpg" />
+    <None Remove="res\b_add_game.jpg" />
+    <None Remove="res\b_add_team.jpg" />
+    <None Remove="res\b_delete_team.jpg" />
+    <None Remove="res\b_edit_team.jpg" />
+    <None Remove="res\b_game_profile.jpg" />
+    <None Remove="res\b_main_window.jpg" />
+    <None Remove="res\b_player_profile.jpg" />
+    <None Remove="res\b_team_window.jpg" />
+    <None Remove="res\default_profile_pic.jpg" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="MySql.Data" Version="8.0.19" />
+    <PackageReference Include="System.Collections" Version="4.3.0" />
+    <PackageReference Include="System.Data.SqlClient" Version="4.8.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="res\b_add_game.jpg" />
+    <Resource Include="res\b_add_team.jpg" />
+    <Resource Include="res\b_delete_team.jpg" />
+    <Resource Include="res\b_edit_team.jpg" />
+    <Resource Include="res\b_game_profile.jpg" />
+    <Resource Include="res\b_main_window.jpg" />
+    <Resource Include="res\b_player_profile.jpg" />
+    <Resource Include="res\b_team_window.jpg" />
+    <Resource Include="res\default_profile_pic.jpg" />
+  </ItemGroup>
+
+</Project>

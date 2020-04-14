@@ -1,0 +1,114 @@
+﻿<Window x:Class="Water_Polo_Statbook.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Water_Polo_Statbook"
+        mc:Ignorable="d"
+        Title="Water Polo Statbook by Evan" Height="450" Width="800" Background="Black"
+        WindowStyle="SingleBorderWindow"
+        WindowStartupLocation="CenterScreen"
+        Activated="Window_ContentRendered"
+        >
+    <Window.Resources>
+       
+    </Window.Resources>
+    <Grid>
+        <!-- BACKGROUND IMAGE -->
+        <Image Source="res/b_main_window.jpg" Margin="-18,-27,-18,-33"/>
+        <Grid Height="415" VerticalAlignment="Top">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="39*"/>
+                <RowDefinition Height="39*"/>
+                <RowDefinition Height="32*"/>
+                <RowDefinition Height="48*"/>
+                <RowDefinition Height="39*"/>
+                <RowDefinition Height="39*"/>
+                <RowDefinition Height="39*"/>
+                <RowDefinition Height="39*"/>
+                <RowDefinition Height="39*"/>
+                <RowDefinition Height="39*"/>
+                <RowDefinition Height="39*"/>
+            </Grid.RowDefinitions>
+
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="64*"/>
+                <ColumnDefinition Width="186*"/>
+                <ColumnDefinition Width="11*"/>
+                <ColumnDefinition Width="92*"/>
+                <ColumnDefinition Width="47*"/>
+            </Grid.ColumnDefinitions>
+            <!-- HEADER PANEL -->
+            <Grid Background="{StaticResource GridBrush}" Grid.Row="0" Grid.RowSpan="2" Grid.ColumnSpan="5">
+
+                <!-- TITLE -->
+                <Label Content="OVERTIME" FontWeight="Bold" FontSize="60" HorizontalAlignment="Center" Style="{StaticResource LabelStyle}" VerticalAlignment="Center"/>
+            </Grid>
+
+            <!-- MENU BUTTON BAR -->
+            <Grid Grid.Column="0" Grid.ColumnSpan="5" Grid.Row="2" Style="{StaticResource GridStyle}">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+                <Grid.Resources>
+                    <Style TargetType="Button" BasedOn="{StaticResource ButtonStyle}"/>
+                </Grid.Resources>
+
+                <!-- ADD NEW TEAM BUTTON -->
+                <Button x:Name="AddTeamBTN" Grid.Column="0" Content="ADD TEAM" Click="AddTeamBTN_Click"/>
+
+                <!-- EDIT TEAM BUTTON -->
+                <Button x:Name="EditTeamBTN" Grid.Column="1" Content="EDIT TEAM" Click="EditTeamBTN_Click"/>
+
+                <!-- VIEW TEAM BUTTON -->
+                <Button x:Name="ViewTeamBTN" Grid.Column="2" Content="VIEW TEAM" Click="ViewTeamBTN_Click"/>
+
+                <!-- DELETE TEAM BUTTON -->
+                <Button x:Name="DeleteTeamBTN" Grid.Column="3" Content="DELETE TEAM" Click="DeleteTeamBTN_Click"/>
+            </Grid>
+
+
+
+
+            <!-- LIST OF TEAMS -->
+            <Grid Grid.Row="3" Grid.RowSpan="8" Margin="5,44,8,39" Grid.Column="1" Style="{StaticResource GridStyle}">
+
+                <!-- TEAM DATA TABLE -->
+                <DataGrid x:Name="TeamsDT" AutoGenerateColumns="False" Background="Transparent" BorderThickness="0"  FontSize="20" IsReadOnly="True" Opacity="1" MouseUp="TeamsDT_MouseUp">
+                    <DataGrid.Resources>
+                        <Style BasedOn="{StaticResource {x:Type DataGridColumnHeader}}" TargetType="{x:Type DataGridColumnHeader}">
+                            <Setter Property="Background" Value="Black"/>
+                            <Setter Property="Foreground" Value="White"/>
+                            <Setter Property="FontWeight" Value="SemiBold"/>
+                        </Style>
+                        <Style TargetType="DataGridRow" BasedOn="{StaticResource DataGridRowStyle}"/>
+                    </DataGrid.Resources>
+
+                    <!-- SPECIFY COLUMN HEADERS -->
+                    <DataGrid.Columns >
+                        <DataGridTextColumn Header="   TEAM" Binding="{Binding team_name}" Width="2*"></DataGridTextColumn>
+                        <DataGridTextColumn Header="YEAR" Binding="{Binding team_year}"></DataGridTextColumn>
+                    </DataGrid.Columns>
+                </DataGrid>
+            </Grid>
+
+
+            <!-- TEAM SEARCH BOX -->
+            <Grid Grid.Column="3"  Grid.Row="4" Grid.RowSpan="4" Margin="0,39,10,0" Style="{StaticResource GridStyle}">
+
+                <Grid.RowDefinitions>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
+
+                <!-- SEARCH BOX -->
+                <Label Content="Search Team" FontSize="20" FontWeight="Medium" Grid.Row="0" HorizontalAlignment="Center" Style="{StaticResource LabelStyle}" VerticalAlignment="Bottom"/>
+                <TextBox x:Name="TeamSearchTB" Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Top" Width="113" Height="24" KeyUp="TeamSearchTB_KeyUp"/>
+            </Grid>
+
+        </Grid>
+    </Grid>
+</Window>

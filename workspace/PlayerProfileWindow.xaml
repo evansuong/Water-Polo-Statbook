@@ -1,0 +1,282 @@
+﻿<Window x:Class="Water_Polo_Statbook.PlayerProfileWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Water_Polo_Statbook"
+        mc:Ignorable="d"
+        Title="PlayerProfileWindow" Height="700" Width="800"
+        WindowStartupLocation="CenterScreen"
+        Activated="Window_Activated">
+    <Grid>
+
+        <!-- BACKGROUND IMAGE -->
+        <Image Source="res/b_player_profile.jpg" Margin="-92,-94,-381,-126"/>
+
+        <!-- MAIN GRID -->
+        <Grid>
+
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="1*"/>
+                <ColumnDefinition Width="4*"/>
+                <ColumnDefinition Width="1*"/>
+            </Grid.ColumnDefinitions>
+
+            <Grid.RowDefinitions>
+                <RowDefinition Height="2*"/>
+                <RowDefinition Height="1*"/>
+                <RowDefinition Height="10*"/>
+                <RowDefinition Height="1*"/>
+            </Grid.RowDefinitions>
+
+            <!-- HEADER PANEL -->
+            <Grid Grid.Column="0" Grid.ColumnSpan="3" Style="{StaticResource GridStyle}">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="6*"/>
+                    <ColumnDefinition Width="1*"/>
+                </Grid.ColumnDefinitions>
+
+                <Grid.Resources>
+                    <Style TargetType="Label"  BasedOn="{StaticResource LabelStyle}"/>
+                    <Style TargetType="Button" BasedOn="{StaticResource ButtonStyle}"/>
+                </Grid.Resources>
+
+                <!-- HEADER -->
+                <Label Content="PROFILE" FontSize="50" FontWeight="Bold" Grid.Column="0" Grid.ColumnSpan="2" VerticalAlignment="Center"/>
+                <!-- BUTTON PANEL -->
+                <Grid Grid.Column="1">
+                    <Grid.RowDefinitions>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                    </Grid.RowDefinitions>
+
+                    <!-- EDIT BUTTON -->
+                    <Button x:Name="EditBTN" Content="EDIT" Grid.Row="0" Click="EditBTN_Click"/>
+                    <!-- BACK BUTTON -->
+                    <Button x:Name="BackBTN" Content="BACK" Grid.Row="1" Click="BackBTN_Click"/>
+                </Grid>
+            </Grid>
+
+            <!-- PLAYER INFO PANEL -->
+            <Grid Grid.Column="1" Grid.Row="2" Style="{StaticResource GridStyle}">
+
+                <!-- PLAYER NAME AND NUMBER -->
+                <Border BorderBrush="{StaticResource WhiteBrush}" BorderThickness="1" Height="40" VerticalAlignment="Top">
+                    <Grid Style="{StaticResource GridStyle}">
+
+                        <Grid.Resources>
+                            <!-- LABEL STYLE -->
+                            <Style TargetType="Label" BasedOn="{StaticResource LabelStyle}">
+                                <Setter Property="FontSize" Value="20"/>
+                                <Setter Property="FontWeight" Value="Medium"/>
+                                <Setter Property="VerticalAlignment" Value="Center"/>
+                            </Style>
+
+                            <!-- TEXTBOX STYLE -->
+                            <Style TargetType="TextBox">
+                                <Setter Property="FontSize" Value="20"/>
+                            </Style>
+                        </Grid.Resources>
+
+                        <!-- NAME AND NUMBER LABELS AND THEIR CORRESPONDING TEXTBOXES -->
+                        <Label Name="NumberLBL" Content="{Binding Num}" HorizontalAlignment="Left"/>
+                        <TextBox x:Name="NumberTB" Text="{Binding Num}" HorizontalAlignment="Left" Width="50"/>
+                        <Label Name="NameLBL" Content="{Binding Name}" HorizontalAlignment="Right"/>
+                        <TextBox x:Name="NameTB" Text="{Binding Name}" HorizontalAlignment="Right" Width="100"/>
+                    </Grid>
+                </Border>
+
+                <!-- PLAYER INFO PANEL -->
+                <Grid Width="400" Height="400">
+
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="1*"/>
+                        <RowDefinition Height="4*"/>
+                        <RowDefinition Height="1*"/>
+                        <RowDefinition Height="7*"/>
+                    </Grid.RowDefinitions>
+
+                    <Grid.Resources>
+                        <!-- LABEL STYLE -->
+                        <Style TargetType="Label" BasedOn="{StaticResource LabelStyle}">
+                            <Setter Property="VerticalAlignment" Value="Center"/>
+                        </Style>
+                    </Grid.Resources>
+
+                    <!-- PLAYER PICTURE AND INFO -->
+                    <Grid Grid.Row="1">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="1*"/>
+                            <ColumnDefinition Width="1*"/>
+                        </Grid.ColumnDefinitions>
+
+                        <!-- PLAYER PIC -->
+                        <Image Name="ProfileIMG" Source="res/default_profile_pic.jpg"/>
+
+                        <!-- PLAYER INFO -->
+                        <Grid Grid.Column="1">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="5*"/>
+                                <ColumnDefinition Width="6*"/>
+                            </Grid.ColumnDefinitions>
+
+                            <Grid.Resources>
+                                <Style TargetType="Label" BasedOn="{StaticResource LabelStyle}">
+                                    <Setter Property="FontSize" Value="15"/>
+                                </Style>
+                            </Grid.Resources>
+
+                            <!-- PLAYER INFO DESCRIPTION -->
+                            <Grid Grid.Column="0">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition/>
+                                    <RowDefinition/>
+                                    <RowDefinition/>
+                                    <RowDefinition/>
+                                </Grid.RowDefinitions>
+                                <Label Content="Position" Grid.Row="0"/>
+                                <Label Content="Year" Grid.Row="1"/>
+                                <Label Content="Height (in)" Grid.Row="2"/>
+                                <Label Content="Weight (lb)" Grid.Row="3"/>
+                            </Grid>
+
+                            <Grid Grid.Column="1">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition/>
+                                    <RowDefinition/>
+                                    <RowDefinition/>
+                                    <RowDefinition/>
+                                </Grid.RowDefinitions>
+
+                                <Grid.Resources>
+                                    <Style TargetType="TextBox">
+                                        <Setter Property="VerticalAlignment" Value="Center"/>
+                                    </Style>
+                                    <Style TargetType="ComboBox">
+                                        <Setter Property="VerticalAlignment" Value="Center"/>
+                                    </Style>
+                                </Grid.Resources>
+
+                                <!-- PLAYER POSITION -->
+                                <Label Name="PosLBL" Content="{Binding Pos}" Grid.Row="0"/>
+                                <ComboBox x:Name="PosCB" Text="{Binding Pos}" Grid.Row="0">
+                                    <ComboBoxItem Content="Attacker"/>
+                                    <ComboBoxItem Content="Defender"/>
+                                    <ComboBoxItem Content="Center"/>
+                                    <ComboBoxItem Content="Goalier"/>
+                                </ComboBox>
+
+                                <!-- PLAYER YEAR -->
+                                <Label Name="YearLBL" Content="{Binding Year}" Grid.Row="1"/>
+                                <ComboBox Name="YearCB" Text="{Binding Year}" Grid.Row="1">
+                                    <ComboBoxItem Content="1"/>
+                                    <ComboBoxItem Content="2"/>
+                                    <ComboBoxItem Content="3"/>
+                                    <ComboBoxItem Content="4"/>
+                                    <ComboBoxItem Content="5"/>
+                                </ComboBox>
+
+                                <!-- PLAYER HEIGHT AND WEIGHT -->
+                                <Label Name="HeightLBL" Content="{Binding Height}" Grid.Row="2"/>
+                                <TextBox x:Name="HeightTB" Text="{Binding Height}" Grid.Row="2"/>
+
+                                <Label Name="WeightLBL" Content="{Binding Weight}" Grid.Row="3"/>
+                                <TextBox x:Name="WeightTB" Text="{Binding Weight}" Grid.Row="3"/>
+
+                            </Grid>
+                        </Grid>
+                    </Grid>
+
+                    <!-- PLAYER STAT SECTION -->
+                    <Grid Grid.Row="3" Style="{StaticResource GridStyle}">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="1*"/>
+                            <RowDefinition Height="1*"/>
+                            <RowDefinition Height="1*"/>
+                            <RowDefinition Height="3*"/>
+                        </Grid.RowDefinitions>
+
+                        <!-- STAT SECTION HEADER -->
+                        <Border BorderBrush="{StaticResource WhiteBrush}" BorderThickness="1">
+                            <Label Content="FULL STATS" FontSize="15" FontWeight="Medium" VerticalAlignment="Center"/>
+                        </Border>
+
+                        <!-- PLAYER TOTAL STATS -->
+                        <DataGrid x:Name="TotalStatsDG" Grid.Row="1" Style="{StaticResource DataGridStyle}">
+                            <DataGrid.Resources>
+                                <Style BasedOn="{StaticResource {x:Type DataGridColumnHeader}}" TargetType="{x:Type DataGridColumnHeader}">
+                                    <Setter Property="Background" Value="Black"/>
+                                    <Setter Property="Foreground" Value="White"/>
+                                    <Setter Property="FontWeight" Value="SemiBold"/>
+                                </Style>
+                                <Style TargetType="DataGridRow" BasedOn="{StaticResource DataGridRowStyle}"/>
+                            </DataGrid.Resources>
+
+                            <!-- SPECIFY COLUMN HEADERS -->
+                            <DataGrid.Columns >
+                                <DataGridTextColumn Header="Total Gol" Binding="{Binding total_gol}" Width="1*"></DataGridTextColumn>
+                                <DataGridTextColumn Header="Total Att" Binding="{Binding total_att}" Width="1*"></DataGridTextColumn>
+                                <DataGridTextColumn Header="Total Ast" Binding="{Binding total_ast}" Width="1*"></DataGridTextColumn>
+                                <DataGridTextColumn Header="Total Blk" Binding="{Binding total_blk}" Width="1*"></DataGridTextColumn>
+                                <DataGridTextColumn Header="Total Stl" Binding="{Binding total_stl}" Width="1*"></DataGridTextColumn>
+                                <DataGridTextColumn Header="Total Exl" Binding="{Binding total_exl}" Width="1*"></DataGridTextColumn>
+                                <DataGridTextColumn Header="Total Tov" Binding="{Binding total_tov}" Width="1*"></DataGridTextColumn>
+                            </DataGrid.Columns>
+                        </DataGrid>
+
+                        <!-- STATS PER GAME -->
+                        <DataGrid x:Name="StatsPerGameDG" Grid.Row="2" Style="{StaticResource DataGridStyle}">
+                            <DataGrid.Resources>
+                                <Style BasedOn="{StaticResource {x:Type DataGridColumnHeader}}" TargetType="{x:Type DataGridColumnHeader}">
+                                    <Setter Property="Background" Value="Black"/>
+                                    <Setter Property="Foreground" Value="White"/>
+                                    <Setter Property="FontWeight" Value="SemiBold"/>
+                                </Style>
+                                <Style TargetType="DataGridRow" BasedOn="{StaticResource DataGridRowStyle}"/>
+                            </DataGrid.Resources>
+
+                            <!-- SPECIFY COLUMN HEADERS -->
+                            <DataGrid.Columns >
+                                <DataGridTextColumn Header="PPG" Binding="{Binding ppg}" Width="1*"></DataGridTextColumn>
+                                <DataGridTextColumn Header="AttPG" Binding="{Binding mpg}" Width="1*"></DataGridTextColumn>
+                                <DataGridTextColumn Header="Shot%" Binding="{Binding shot_pct}" Width="1*"></DataGridTextColumn>
+                                <DataGridTextColumn Header="APG" Binding="{Binding apg}" Width="1*"></DataGridTextColumn>
+                                <DataGridTextColumn Header="BPG" Binding="{Binding bpg}" Width="1*"></DataGridTextColumn>
+                                <DataGridTextColumn Header="SPG" Binding="{Binding spg}" Width="1*"></DataGridTextColumn>
+                                <DataGridTextColumn Header="EPG" Binding="{Binding epg}" Width="1*"></DataGridTextColumn>
+                                <DataGridTextColumn Header="TPG" Binding="{Binding tpg}" Width="1*"></DataGridTextColumn>
+                            </DataGrid.Columns>
+                        </DataGrid>
+
+                        <!-- STATS BY GAME -->
+                        <DataGrid x:Name="GameStatsDG" Grid.Row="3" Style="{StaticResource DataGridStyle}">
+                            <DataGrid.Resources>
+                                <Style BasedOn="{StaticResource {x:Type DataGridColumnHeader}}" TargetType="{x:Type DataGridColumnHeader}">
+                                    <Setter Property="Background" Value="Black"/>
+                                    <Setter Property="Foreground" Value="White"/>
+                                    <Setter Property="FontWeight" Value="SemiBold"/>
+                                </Style>
+                                <Style TargetType="DataGridRow" BasedOn="{StaticResource DataGridRowStyle}"/>
+                            </DataGrid.Resources>
+
+                            <!-- SPECIFY COLUMN HEADERS -->
+                            <DataGrid.Columns >
+                                <DataGridTextColumn Header="Vs." Binding="{Binding opp_team}" Width="3*"></DataGridTextColumn>
+                                <DataGridTextColumn Header="Gol" Binding="{Binding total_gol}" Width="1*"></DataGridTextColumn>
+                                <DataGridTextColumn Header="Att" Binding="{Binding total_att}" Width="1*"></DataGridTextColumn>
+                                <DataGridTextColumn Header="Ast" Binding="{Binding total_ast}" Width="1*"></DataGridTextColumn>
+                                <DataGridTextColumn Header="Blk" Binding="{Binding total_blk}" Width="1*"></DataGridTextColumn>
+                                <DataGridTextColumn Header="Stl" Binding="{Binding total_stl}" Width="1*"></DataGridTextColumn>
+                                <DataGridTextColumn Header="Exl" Binding="{Binding total_exl}" Width="1*"></DataGridTextColumn>
+                                <DataGridTextColumn Header="T/Over" Binding="{Binding total_tov}" Width="1*"></DataGridTextColumn>
+                            </DataGrid.Columns>
+                        </DataGrid>
+                    </Grid>
+
+                   
+                </Grid>
+            </Grid>
+        </Grid>
+
+    </Grid>
+</Window>
