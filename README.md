@@ -11,12 +11,12 @@ This tool is meant to help water polo staff keep better track of how their team 
 Some screenshots:
 
 
-![Home Screen](/Water-Polo-Statbook/screenshots/home.png)
+![Home Screen](/workspace/screenshots/home.png)
 
-![Team Editor](/Water-Polo-Statbook/screenshots/editor.png)
+![Team Editor](/workspace/screenshots/editor.png)
 
-![Team Home Window](/Water-Polo-Statbook/screenshots/teamhome.png)
+![Team Home Window](/workspace/screenshots/teamhome.png)
 
-![Player Profile](/Water-Polo-Statbook/screenshots/profile.png)
+![Player Profile](/workspace/screenshots/profile.png)
 
-![Game Statsheet](/Water-Polo-Statbook/screenshots/game.png)
+![Game Statsheet](/workspace/screenshots/game.png)
