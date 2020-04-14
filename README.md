@@ -7,3 +7,16 @@ The program starts up at team home, where the user can select, add, or delete th
 The user inserts stats into the team's database by creating a new game, in which the user will be taken to the game's statsheet where stats can be inserted into the game by quarter. This statsheet is much like a real life statbook page where the user inserts game events as the game proceeds. When the user exits the game sheet all stats will from each game are stored and updated in all other pages. 
 
 This tool is meant to help water polo staff keep better track of how their team is doing as a whole, as well as the progress and performance of each player on their team. Rather than having to manually count up all goals, shot percentages, turnovers, etc. etc, they are neatly presented with all necessary information that will contribute to a team's success. 
+
+Some screenshots:
+
+
+![Home Screen](/screenshots/home.png)
+
+![Team Editor](/screenshots/editor.png)
+
+![Team Home Window](/screenshots/teamhome.png)
+
+![Player Profile](/screenshots/profile.png)
+
+![Game Statsheet](/screenshots/game.png)
