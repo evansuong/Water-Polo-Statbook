@@ -558,19 +558,12 @@ namespace Water_Polo_Statbook
 
         // player stats
         private int totalGoals;
-        private float ppg;
         private int totalAttempts;
-        private float mpg;
         private int totalAssists;
-        private float apg;
         private int totalBlocks;
-        private float bpg;
         private int totalSteals;
-        private float spg;
         private int totalExclusions;
-        private float epg;
         private int totalTurnovers;
-        private float tpg;
 
         public MyPlayer ()
         {
@@ -749,6 +742,8 @@ namespace Water_Polo_Statbook
             this.result = ds.Tables[0].Rows[0]["game_result"].ToString();
             this.id = Convert.ToInt32(ds.Tables[0].Rows[0]["id"].ToString());
             this.teamId = Convert.ToInt32(ds.Tables[0].Rows[0]["team_id"].ToString());
+            this.homeGoals = Convert.ToInt32(ds.Tables[0].Rows[0]["total_gol"].ToString());
+            this.oppGoals = Convert.ToInt32(ds.Tables[0].Rows[0]["opp_total_gol"].ToString());
 
             this.hasAttributes = true;
         }

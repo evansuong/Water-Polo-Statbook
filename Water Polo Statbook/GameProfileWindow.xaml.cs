@@ -40,14 +40,14 @@ namespace Water_Polo_Statbook
 
 
         // query commands
-        private const string SELECT_GOALS_QRY = "select game_stats.total_gol, game_stats_opponent.total_gol as opp_total_gol from game_stats inner join game_stats_opponent on game_stats.game_id = game_stats_opponent.game_id where game_stats.game_id={0}";
+        private const string SELECT_GOALS_QRY = "select sum(game_stats.total_gol) as total_gol, game_stats_opponent.total_gol as opp_total_gol from game_stats inner join game_stats_opponent on game_stats.game_id = game_stats_opponent.game_id where game_stats.game_id={0}";
         private const string SELECT_OPP_STATS_QRY = "select * from game_stats_opponent where game_id={0}";
         private const string SELECT_GAMEHIST_QRY = "select * from game_history where event_game_id={0}";
         private const string SELECT_PLAYER_NUMS_QRY = "select player_num from player where team_id={0}";
         private const string SELECT_PLAYER_ID_QRY = "select id from player where player_num={0} and team_id={1}";
-        private const string SELECT_PLAYER_GAME_STATS_QRY = "select player_num, player_name, total_gol, total_att, total_ast, total_blk, total_stl, total_exl, total_tov, q1_gol, q2_gol, q3_gol, q4_gol, ot_gol, game_id from player inner join game_stats on player.id = game_stats.player_id where game_stats.game_id={0}";
+        private const string SELECT_PLAYER_GAME_STATS_QRY = "select player_num, player_name, total_gol, total_att, total_ast, total_blk, total_stl, total_exl, total_tov, q1_gol, q2_gol, q3_gol, q4_gol, ot_gol, game_id from player inner join game_stats on player.id = game_stats.player_id where game_stats.game_id={0} order by player_num";
         private const string INSERT_STAT_QRY = "insert into game_history values ({0}, '{1}', {2}, {3}, {4}, NULL)";
-        private const string UPDATE_GAME_RESULT_QRY = "update game set game_result='{0}' where id={1}";
+        private const string UPDATE_GAME_QRY = "update game set game_result='{0}', total_gol={1}, opp_total_gol={2} where id={3}";
         private const string DELETE_STAT_QRY = "delete from game where id={0}";
 
         public GameProfileWindow(Window callingWindow, MyTeam myTeam, MyGame myGame, MySqlQueryBuilder build)
@@ -64,9 +64,10 @@ namespace Water_Polo_Statbook
         {
             AddStatPNL.Visibility = Visibility.Hidden;
 
+            Set_Game_Stats();
             Load_Opp_Table();
-            Set_Labels();
             Update_Tables();
+            Set_Labels();
         }
 
         private void AddStatBTN_Click(object sender, RoutedEventArgs e)
@@ -80,12 +81,6 @@ namespace Water_Polo_Statbook
         private void RemoveStatBTN_Click(object sender, RoutedEventArgs e)
         {
             Delete_Stat();
-        }
-
-        private void StatBTN_Checked(object sender, RoutedEventArgs e)
-        {
-            RadioButton btn = (RadioButton)sender;
-            statType = Set_Stat_Type(btn.Content.ToString());
         }
 
 
@@ -117,8 +112,8 @@ namespace Water_Polo_Statbook
 
         private void BackBTN_Click(object sender, RoutedEventArgs e)
         {
-            Set_Game_Stats();
             Update_Team_Stats();
+            Set_Game_Stats();
             callingWindow.Show();
             this.Close();
         }
@@ -146,10 +141,10 @@ namespace Water_Polo_Statbook
             }
 
             // deafult player id
-            int playerId = 0;
+            int playerId;
 
             // parse player number from combobox
-            int playerNum = 0;
+            int playerNum;
 
             // if player is opponent, dont parse player value
             if (PlayerCB.Text.ToString() == "Opponent")
@@ -161,6 +156,7 @@ namespace Water_Polo_Statbook
             // if home team stat, parse player id from player number 
             else
             {
+                statType = Set_Stat_Type();
                 playerNum = Int32.Parse(PlayerCB.Text.ToString());
             }
 
@@ -206,13 +202,17 @@ namespace Water_Polo_Statbook
             }
         }
 
+        /// <summary>
+        /// sets home and away goals of game upon returning to team main window
+        /// </summary>
         private void Set_Game_Stats()
-        {
+        {// TODO update game goals when user leaves the screen
+            // TODO update score in this window when a goal is scoredn
             // set home and opponent goals of mygame
-            string qry = string.Format(SELECT_GOALS_QRY, myGame.GetId());
+            string selqry = string.Format(SELECT_GOALS_QRY, myGame.GetId());
 
             // fill game stats
-            myGame.Set_Stats(build.Execute_DataSet_Query(qry));
+            myGame.Set_Stats(build.Execute_DataSet_Query(selqry));
         }
 
         /// <summary>
@@ -220,28 +220,27 @@ namespace Water_Polo_Statbook
         /// </summary>
         /// <param name="statType"></param>
         /// <returns></returns>
-        private char Set_Stat_Type(string btnType)
+        private char Set_Stat_Type()
         {
-            switch (btnType)
-            {
-                case "Goal":
-                    return 'G';
-                case "Attempt":
-                    return 'M';
-                case "Assist":
-                    return 'A';
-                case "Block":
-                    return 'B';
-                case "Steal":
-                    return 'S';
-                case "Exclusion":
-                    return 'E';
-                case "Turnover":
-                    return 'T';
-            }
-            return 'M';
+            if ((bool)GolBTN.IsChecked)
+                return 'G'; 
+            else if ((bool)AttBTN.IsChecked)
+                return 'M'; 
+            else if ((bool)AstBTN.IsChecked)
+                return 'A'; 
+            else if ((bool)BlkBTN.IsChecked)
+                return 'B'; 
+            else if ((bool)StlBTN.IsChecked)
+                return 'S';
+            else if ((bool)ExlBTN.IsChecked)
+                return 'E';
+            else
+                return 'T';
         }
 
+        /// <summary>
+        /// udpates game result and score in game table
+        /// </summary>
         private void Update_Team_Stats()
         {
             // check whether game was a win, loss, or tie
@@ -259,7 +258,7 @@ namespace Water_Polo_Statbook
             }
 
             // update game result in database
-            string qry = string.Format(UPDATE_GAME_RESULT_QRY, result, myGame.GetId());
+            string qry = string.Format(UPDATE_GAME_QRY, result, homeGoals, oppGoals, myGame.GetId());
             build.Execute_Query(qry);
         }
 

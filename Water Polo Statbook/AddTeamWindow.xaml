@@ -64,9 +64,19 @@
                         <ColumnDefinition Width="20"/>
                         <ColumnDefinition/>
                     </Grid.ColumnDefinitions>
-                    <TextBox x:Name="TeamYearTB1" MaxLength="4" Grid.Column="0" Width="63" VerticalAlignment="Stretch"/>
+                    <Grid.Resources>
+                        <Style TargetType="TextBox">
+                            <Setter Property="Foreground" Value="Gray"/>
+                            <Setter Property="MaxLength" Value="4"/>
+                            <Setter Property="Width" Value="63"/>
+                            <Setter Property="VerticalAlignment" Value="Stretch"/>
+                            <Setter Property="Text" Value="yyyy"/>
+                            <Setter Property="HorizontalContentAlignment" Value="Center"/>
+                        </Style>
+                    </Grid.Resources>
+                    <TextBox x:Name="TeamYearTB1" Grid.Column="0" GotFocus="TeamYearTB1_GotFocus"/>
                     <Label Content="-" FontSize="20" Foreground="White" Grid.Column="1" VerticalAlignment="Top" Margin="1,-11,61,0" Grid.ColumnSpan="2" Height="47"/>
-                    <TextBox x:Name="TeamYearTB2" Grid.Column="2" MaxLength="4" Width="63" VerticalAlignment="Stretch"/>
+                    <TextBox x:Name="TeamYearTB2" Grid.Column="2" GotFocus="TeamYearTB2_GotFocus"/>
                 </Grid>
 
                 <Button x:Name="CreateBTN" Content="Create Team" Background="Transparent" Foreground="White" HorizontalAlignment="Center" VerticalAlignment="Top" Width="104" Height="31" Grid.Row="7" Click="CreateBTN_Click"/>

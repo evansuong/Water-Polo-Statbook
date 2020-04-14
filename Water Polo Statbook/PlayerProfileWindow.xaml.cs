@@ -34,7 +34,7 @@ namespace Water_Polo_Statbook
         // string constants
         private const string SELECT_PLAYER_QRY = "select * from player where id={0}";
         private const string SELECT_TOTALSTATS_QRY = "select * from player_stats where player_id={0}";
-        private const string SELECT_GAMESTATS_QRY = "select opp_team, total_gol, total_att, total_ast, total_blk, total_stl, total_exl, total_tov from game_stats inner join game on game_stats.game_id = game.id where player_id={0}";
+        private const string SELECT_GAMESTATS_QRY = "select opp_team, game_stats.total_gol, total_att, total_ast, total_blk, total_stl, total_exl, total_tov from game_stats inner join game on game_stats.game_id = game.id where player_id={0}";
         private const string UPDATE_PLAYER_QRY = "update player set player_num={0}, player_name='{1}', player_pos='{2}', player_year={3}, player_height={4}, player_weight={5} where id={6}";
         
         public PlayerProfileWindow(Window callingWindow, MyTeam myTeam, MyPlayer myPlayer, MySqlQueryBuilder build)
@@ -113,14 +113,14 @@ namespace Water_Polo_Statbook
 
             // create row and fill rows with stat averages
             DataRow player = dt.NewRow();
-            player["ppg"] = Calculate_Avg(myPlayer.GetTotalGoals(), gamesPlayed);
-            player["mpg"] = Calculate_Avg(myPlayer.GetTotalAttempts(), gamesPlayed);
-            player["shot_pct"] = Calculate_Avg(myPlayer.GetTotalGoals(), myPlayer.GetTotalAttempts()) + "%"; 
-            player["apg"] = Calculate_Avg(myPlayer.GetTotalAssists(), gamesPlayed);
-            player["bpg"] = Calculate_Avg(myPlayer.GetTotalBlocks(), gamesPlayed);
-            player["spg"] = Calculate_Avg(myPlayer.GetTotalSteals(), gamesPlayed);
-            player["epg"] = Calculate_Avg(myPlayer.GetTotalExclusions(), gamesPlayed);
-            player["tpg"] = Calculate_Avg(myPlayer.GetTotalTurnovers(), gamesPlayed);
+            player["ppg"] = string.Format("{0:0.0}", Calculate_Avg(myPlayer.GetTotalGoals(), gamesPlayed));
+            player["mpg"] = string.Format("{0:0.0}", Calculate_Avg(myPlayer.GetTotalAttempts(), gamesPlayed));
+            player["shot_pct"] = string.Format("{0:0}", Calculate_Avg(myPlayer.GetTotalGoals(), myPlayer.GetTotalAttempts())* 100) + "%"; 
+            player["apg"] = string.Format("{0:0.0}", Calculate_Avg(myPlayer.GetTotalAssists(), gamesPlayed));
+            player["bpg"] = string.Format("{0:0.0}", Calculate_Avg(myPlayer.GetTotalBlocks(), gamesPlayed));
+            player["spg"] = string.Format("{0:0.0}", Calculate_Avg(myPlayer.GetTotalSteals(), gamesPlayed));
+            player["epg"] = string.Format("{0:0.0}", Calculate_Avg(myPlayer.GetTotalExclusions(), gamesPlayed));
+            player["tpg"] = string.Format("{0:0.0}", Calculate_Avg(myPlayer.GetTotalTurnovers(), gamesPlayed));
 
             dt.Rows.Add(player);
 
@@ -128,19 +128,19 @@ namespace Water_Polo_Statbook
             StatsPerGameDG.ItemsSource = dt.DefaultView;
         }
 
-        private string Calculate_Avg(int stat, int gp)
+        private float Calculate_Avg(int stat, int gp)
         {
             if (gp == 0)
             {
-                return "0.0";
+                return 0;
             }
             else if (stat == 0)
             {
-                return "0.0";
+                return 0;
             }
             else
             {
-                return string.Format("{0:0.00}", stat / (float)gp);
+                return  stat / (float)gp;
             }
         }
 

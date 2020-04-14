@@ -5,8 +5,8 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Water_Polo_Statbook"
         mc:Ignorable="d"
-        Title="EditGameWindow" Height="500" Width="600
-        ">
+        Title="EditGameWindow" Height="500" Width="600"
+        WindowStartupLocation="CenterScreen">
 
 
     <Grid>
@@ -136,7 +136,7 @@
                         </ComboBox>
                         <Label Content="-"/>
                         <!-- YEAR -->
-                        <TextBox x:Name="YearTB" FontStyle="Italic" Foreground="Gray" GotFocus="YearTB_GotFocus" MaxLength="4" Width="50" Text="yyyy"/>
+                        <TextBox x:Name="YearTB" Foreground="Gray" GotFocus="YearTB_GotFocus" MaxLength="4" Width="50" Text="yyyy"/>
                     </StackPanel>
                 </StackPanel>
                 <Button x:Name="UpdateBTN" Content="UPDATE" Grid.Row="3" Grid.ColumnSpan="2" Height="40" Width="75" Style="{StaticResource ButtonStyle}" Click="UpdateBTN_Click"/>

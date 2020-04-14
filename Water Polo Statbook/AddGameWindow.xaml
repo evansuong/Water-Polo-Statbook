@@ -135,7 +135,7 @@
                         </ComboBox>
                         <Label Content="-"/>
                         <!-- YEAR -->
-                        <TextBox x:Name="YearTB" FontStyle="Italic" Foreground="Gray" GotFocus="YearTB_GotFocus" MaxLength="4" Width="50" Text="yyyy"/>
+                        <TextBox x:Name="YearTB" Foreground="Gray" GotFocus="YearTB_GotFocus" MaxLength="4" Width="50" Text="yyyy"/>
                     </StackPanel>
                 </StackPanel>
                 <Button x:Name="CreateBTN" Content="CREATE" Grid.Row="3" Grid.ColumnSpan="2" Height="40" Width="75" Style="{StaticResource ButtonStyle}" Click="CreateBTN_Click"/>

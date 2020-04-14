@@ -31,8 +31,8 @@ namespace Water_Polo_Statbook
 
         // string constatns
         private const string DATE_FMT = "{0}-{1}-{2}";
-        private const string INSERT_GAME_QRY = "insert into game values ('{0}', '{1}', '{2}', '{3}', 'T', {4}, NULL)";
-        private const string SELECT_GAME_QRY = "select opp_team, game_type, game_location, date_format(game_date, '%M-%D-%Y') as game_date, game_result, team_id, id from game order by id desc limit 1";
+        private const string INSERT_GAME_QRY = "insert into game values ('{0}', '{1}', '{2}', '{3}', 'T', {4}, NULL, 0, 0)";
+        private const string SELECT_GAME_QRY = "select opp_team, game_type, game_location, date_format(game_date, '%M-%D-%Y') as game_date, game_result, team_id, id, total_gol, opp_total_gol from game order by id desc limit 1";
 
         public AddGameWindow(Window callingWindow, MyTeam myTeam, MyGame myGame, MySqlQueryBuilder build)
         {
@@ -92,6 +92,7 @@ namespace Water_Polo_Statbook
         {
             TextBox tb = sender as TextBox;
             tb.Text = "";
+            tb.Foreground = Brushes.Black;
         }
     }
 }

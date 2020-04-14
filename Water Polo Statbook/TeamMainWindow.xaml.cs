@@ -39,18 +39,18 @@ namespace Water_Polo_Statbook
         private const string SELECT_PLAYERS_QRY = "select * from player where team_id={0}";
         private const string SELECT_PLAYER_ATTR_QRY = "select * from player where id={0}";
         private const string SELECT_PLAYER_STATS_QRY = "select * from player_stats where player_id={0}";
-        private const string SEARCH_PLAYER_BY_NAME_QRY = "select * from player where player_name like '{0}%' and team_id={1}";
-        private const string SELECT_PLAYER_ATT_STATS_QRY = "select * from player inner join player_stats on player.id = player_stats.player_id where team_id={0}";
+        private const string SEARCH_PLAYER_BY_NAME_QRY = "select * from player where player_name like '{0}%' and team_id={1} order by player_num";
+        private const string SELECT_PLAYER_ATT_STATS_QRY = "select * from player inner join player_stats on player.id = player_stats.player_id where team_id={0} order by player_num";
         private const string SELECT_MAX_GOL_QRY = "select player.player_name, player_stats.total_gol from player inner join player_stats on player.id = player_stats.player_id where team_id={0} order by total_gol desc limit 1";
         private const string SELECT_MAX_AST_QRY = "select player.player_name, player_stats.total_ast from player inner join player_stats on player.id = player_stats.player_id where team_id={0} order by total_ast desc limit 1";
         private const string SELECT_MAX_BLK_QRY = "select player.player_name, player_stats.total_blk from player inner join player_stats on player.id = player_stats.player_id where team_id={0} order by total_blk desc limit 1";
         private const string SELECT_MAX_STL_QRY = "select player.player_name, player_stats.total_stl from player inner join player_stats on player.id = player_stats.player_id where team_id={0} order by total_stl desc limit 1";
 
         // game queries
-        private const string SELECT_GAME_QRY = "select game.opp_team, game.game_type, game.game_location, game.game_result, date_format(game_date, '%M-%D-%Y') as game_date, game.team_id, game.id, game_stats_opponent.total_gol as opp_total_gol, game_stats.total_gol from game inner join game_stats on game.id = game_stats.game_id inner join game_stats_opponent on game.id = game_stats_opponent.game_id where game.id={0}";
-        private const string SELECT_GAMES_QRY = "select game.opp_team, game.game_type, game.game_location, date_format(game.game_date, '%M-%D-%Y') as game_date, game.game_result, game.id, game_stats.total_gol, game_stats_opponent.total_gol as opp_total_gol from game inner join game_stats on game.id = game_stats.game_id inner join game_stats_opponent on game.id = game_stats_opponent.game_id where game.team_id={0}";
+        private const string SELECT_GAME_QRY = "select game.opp_team, game.game_type, game.game_location, game.game_result, date_format(game_date, '%M-%D-%Y') as game_date, game.team_id, game.id, game.total_gol, game.opp_total_gol from game where id={0}";
+        private const string SELECT_GAMES_QRY = "select opp_team, game_type, game_location, date_format(game_date, '%M-%D-%Y') as game_date, game_result, id, total_gol, opp_total_gol from game where team_id={0}";
         private const string DELETE_GAME_QRY = "delete from game where id={0}";
-        private const string SEARCH_GAME_BY_NAME_QRY = "select game.opp_team, game.game_type, game.game_location, date_format(game.game_date, '%M-%D-%Y') as game_date, game.game_result, game.id, game_stats.total_gol, game_stats_opponent.total_gol as opp_total_gol from game inner join game_stats on game.id = game_stats.game_id inner join game_stats_opponent on game.id = game_stats_opponent.game_id where game.opp_team like '{0}%' and game.team_id={1}";
+        private const string SEARCH_GAME_BY_NAME_QRY = "select game.opp_team, game.game_type, game.game_location, date_format(game.game_date, '%M-%D-%Y') as game_date, game.game_result, game.id, game.total_gol, game.opp_total_gol from game where game.opp_team like '{0}%' and game.team_id={1}";
 
         // team queries
         private const string SELECT_TEAM_STATS_QRY = "select * from team_stats where team_id={0}";
@@ -295,6 +295,12 @@ namespace Water_Polo_Statbook
         }
 
 
+        private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            callingWindow.Show();
+        }
+
+
         /* --------------- PLAYER HELPER METHODS -------------------- */
         /// <summary>
         /// fills myplayer attributes and stats of selected player
@@ -473,16 +479,15 @@ namespace Water_Polo_Statbook
             // set team name and id if a team is selected
             if (GamesDG.SelectedItems.Count == 1)
             {
-                var items = GamesDG.SelectedItems;
-                foreach (DataRowView item in items)
-                {
-                    // parse game id from selected game
-                    int id = Int32.Parse(item["id"].ToString());
+                DataRowView item = (DataRowView)GamesDG.SelectedItem;
+                
+                // parse game id from selected game
+                int id = Int32.Parse(item["id"].ToString());
 
-                    // get game attributes from qry by id
-                    string qry = string.Format(SELECT_GAME_QRY, id);
-                    myGame.Set_Attributes(build.Execute_DataSet_Query(qry));
-                }
+                // get game attributes from qry by id
+                string qry = string.Format(SELECT_GAME_QRY, id);
+                myGame.Set_Attributes(build.Execute_DataSet_Query(qry));
+                
             }
         }
 

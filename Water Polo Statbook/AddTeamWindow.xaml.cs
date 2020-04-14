@@ -67,6 +67,25 @@ namespace Water_Polo_Statbook
             Create_Team();
         }
 
+        /// <summary>
+        /// cleara textboxes when user clicks on it
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void TeamYearTB1_GotFocus(object sender, RoutedEventArgs e)
+        {
+            TextBox tb = sender as TextBox;
+            tb.Text = "";
+            tb.Foreground = Brushes.Black;
+        }
+
+        private void TeamYearTB2_GotFocus(object sender, RoutedEventArgs e)
+        {
+            TextBox tb = sender as TextBox;
+            tb.Text = "";
+            tb.Foreground = Brushes.Black;
+        }
+
         /* ------------- HELPER METHODS ------------ */
         /// <summary>
         /// fills myteam with attributes and stats and inserts into datatable

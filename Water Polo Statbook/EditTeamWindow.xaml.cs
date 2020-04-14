@@ -48,6 +48,7 @@ namespace Water_Polo_Statbook
         private const string DELETE_PLAYER_QRY = "delete from player where id={0}";
         private const string SEARCH_PLAYER_BY_NAME_QRY = "select * from player where player_name like '{0}%' and team_id={1}";
         private const string SEARCH_PLAYER_BY_ID_QRY = "select * from player where id={0}";
+        private const string SELECT_PLAYERS_QRY = "select * from player where team_id={0} order by player_num";
 
         // message constans
         private const string SELECT_PLAYER_MSG = "Please select a player";
@@ -147,7 +148,7 @@ namespace Water_Polo_Statbook
         private void Load_Table_Data()
         {
             // select all players 
-            string qry = "select * from player where team_id=" + myTeam.GetId();
+            string qry = string.Format(SELECT_PLAYERS_QRY, myTeam.GetId());
             PlayersDT.ItemsSource = build.Execute_DataTable_Qry(qry).DefaultView;
         }
 
