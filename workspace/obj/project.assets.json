@@ -6060,11 +6060,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\evans\\Desktop\\Projects\\C#\\SQL Tutorials\\Water Polo Statbook\\Water Polo Statbook\\Water Polo Statbook.csproj",
+      "projectUniqueName": "C:\\Users\\evans\\Desktop\\Projects\\C#\\SQL Tutorials\\Water Polo Statbook\\workspace\\Water Polo Statbook.csproj",
       "projectName": "Water Polo Statbook",
-      "projectPath": "C:\\Users\\evans\\Desktop\\Projects\\C#\\SQL Tutorials\\Water Polo Statbook\\Water Polo Statbook\\Water Polo Statbook.csproj",
+      "projectPath": "C:\\Users\\evans\\Desktop\\Projects\\C#\\SQL Tutorials\\Water Polo Statbook\\workspace\\Water Polo Statbook.csproj",
       "packagesPath": "C:\\Users\\evans\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\evans\\Desktop\\Projects\\C#\\SQL Tutorials\\Water Polo Statbook\\Water Polo Statbook\\obj\\",
+      "outputPath": "C:\\Users\\evans\\Desktop\\Projects\\C#\\SQL Tutorials\\Water Polo Statbook\\workspace\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\evans\\AppData\\Roaming\\NuGet\\NuGet.Config",

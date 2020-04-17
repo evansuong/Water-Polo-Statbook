@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "L08F4yzptKsoIuiTP+nrmNf1e6XL/3+byupK1ZJcbz6JkFrJV15sqF831JLFxIUpfY+dz30E+DnkvImW1bAWUA==",
+  "dgSpecHash": "ZfZUXDlXHQvq4fqPaqvMBR9nROSRqwD6Hm+q/K66RPOU4W6YdFZ8ggzIRuQ6qWXDOgsA/hqo0gncFM9TrVFjdg==",
   "success": true,
-  "projectFilePath": "C:\\Users\\evans\\Desktop\\Projects\\C#\\SQL Tutorials\\Water Polo Statbook\\Water Polo Statbook\\Water Polo Statbook.csproj",
+  "projectFilePath": "C:\\Users\\evans\\Desktop\\Projects\\C#\\SQL Tutorials\\Water Polo Statbook\\workspace\\Water Polo Statbook.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\evans\\.nuget\\packages\\bouncycastle.netcore\\1.8.3\\bouncycastle.netcore.1.8.3.nupkg.sha512",
     "C:\\Users\\evans\\.nuget\\packages\\google.protobuf\\3.6.1\\google.protobuf.3.6.1.nupkg.sha512",
