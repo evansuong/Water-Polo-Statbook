@@ -1,4 +1,5 @@
-The Overtime Statbook v1.0 is a water polo statbook utility that keeps record of multiple water polo team stats throughout a season. This tool interacts with SQL Server to store, analyze, and present goals, assists, steals, blocks, exclusions, and turnovers of players and teams throughout their respective seasons. 
+# Overtime Water Polo Statook
+The Overtime Statbook v1.0.0 is a water polo statbook utility that keeps record of multiple water polo team stats throughout a season. This full-stack wpf application interacts with SQL Server to store, analyze, and present goals, assists, steals, blocks, exclusions, and turnovers of players and teams throughout their respective seasons. 
 
 This tool can be used by coaches, players, and staff to keep track of team records, win/loss percentages, shot percentages, and much more. 
 
@@ -8,7 +9,11 @@ The user inserts stats into the team's database by creating a new game, in which
 
 This tool is meant to help water polo staff keep better track of how their team is doing as a whole, as well as the progress and performance of each player on their team. Rather than having to manually count up all goals, shot percentages, turnovers, etc. etc, they are neatly presented with all necessary information that will contribute to a team's success. 
 
-Some screenshots:
+## db schema:
+![Database Schema](/workspace/screenshots/db-schema.jpg)
+
+
+## screenshots:
 
 
 ![Home Screen](/workspace/screenshots/home.png)
